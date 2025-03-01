@@ -50,6 +50,7 @@ coverage.xml
 *~
 *.bak
 *.backup
+Drawry.code-workspace
 
 # OS files
 .DS_Store

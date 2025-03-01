@@ -1,0 +1,192 @@
+/* 전체 페이지에서 드래그 방지 */
+body,
+.wrapper,
+.container,
+.text-container,
+.title-container,
+.draggable,
+.hint-container,
+.modal {
+  user-select: none; /* 텍스트 선택 방지 */
+}
+
+/* 버튼, 링크, 인터랙션 요소도 드래그 방지 */
+button,
+a {
+  user-select: none;
+}
+
+/* 이미지 드래그 방지 */
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
+#section-2 {
+  display: none;
+}
+
+#section-1 .help {
+  top: -5px; /* 제목보다 약간 위쪽 */
+  left: 80px;
+}
+
+#section-2 .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+
+.text-container {
+  display: flex;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.speak-btn-word {
+  background: none;
+  border: none;
+  font-size: 80px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.speak-btn-word:hover {
+  transform: scale(1.2);
+}
+
+.game-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.hangul-display {
+  width: 850px;
+  height: 300px;
+  background-color: #fffff6;
+  border: 5px solid #fedf50;
+  display: grid;
+  border-radius: 20px;
+  padding: 10px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 850px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.draggable-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 왼쪽 정렬 */
+  width: 800px;
+  gap: 20px;
+}
+
+.draggable-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.draggable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  padding: 5px;
+  cursor: grab;
+  background-color: #ff8203;
+  border: 1px solid #ff8203;
+  border-radius: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+}
+
+.hint-container {
+  width: 50px;
+  height: 50px;
+  right: -20px;
+  background-color: #fedf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  position: absolute;
+}
+
+.hint-container:hover {
+  transform: scale(1.1);
+}
+
+.rotatable {
+  width: 125px;
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff8203;
+  border: 1px solid #ff8203;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 100px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hint-modal {
+  display: none;
+  position: fixed;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  width: 850px;
+  height: 300px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.hint-text {
+  color: #c0bdbd;
+  font-size: 150px;
+  font-weight: bold;
+}
+
+.hint-modal.show {
+  visibility: visible;
+  opacity: 1;
+}

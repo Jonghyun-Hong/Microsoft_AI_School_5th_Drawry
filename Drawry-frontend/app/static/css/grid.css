@@ -1,0 +1,210 @@
+body {
+  font-family: "peach", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  margin: 0;
+  background-color: #fffff6;
+}
+#gameScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  height: 90vh;
+}
+
+#startScreen .help {
+  top: -5px; /* 제목보다 약간 위쪽 */
+  left: 90px;
+}
+
+#gameScreen .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 70px;
+}
+
+.text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin-top: 70px;
+  margin-bottom: 70px;
+  position: relative;
+}
+
+.intro-text {
+  font-size: 60px;
+  font-weight: bold;
+  text-align: center;
+  color: #ff8e03;
+  text-align: center;
+  opacity: 0;
+  letter-spacing: 20px;
+  position: absolute; /* 🔹 중앙 정렬을 위해 절대 위치 */
+  left: 51%;
+  transform: translateX(-50%);
+}
+
+.loop-animation {
+  animation: fadeInOutLoop 3s ease-in-out infinite; /* 🔹 무한 반복 */
+}
+
+.speak-btn-word {
+  position: absolute;
+  left: 20%;
+  background: none;
+  border: none;
+  padding: 10px 35px;
+  font-size: 60px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.speak-btn-word:hover {
+  transform: scale(1.2);
+}
+
+.grid {
+  display: grid;
+  background-color: #ff8e03;
+  border: 2px solid #ff8e03;
+  grid-template-columns: repeat(5, 100px);
+  grid-template-rows: repeat(5, 100px);
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  width: max-content;
+  margin: 0 auto;
+  margin-top: 70px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cell.correct {
+  background-color: #4caf50;
+  color: white;
+  transform: scale(1.05);
+}
+
+.cell.wrong {
+  background-color: #f44336;
+  color: white;
+  animation: shake 0.5s ease-in-out;
+}
+
+#congratsMessage {
+  font-size: 2rem;
+  color: #4caf50;
+  text-align: center;
+  padding: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.modal-btn {
+  background-color: #ff8e03;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.modal-btn:hover {
+  background-color: #ff6f00;
+  transform: scale(1.2);
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+@keyframes fadeInOutLoop {
+  0% {
+    opacity: 0;
+    filter: blur(5px);
+  }
+  12% {
+    opacity: 0.2;
+    filter: blur(4px);
+  }
+  24% {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+  36% {
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  64% {
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  76% {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+  88% {
+    opacity: 0.2;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(5px);
+  }
+}

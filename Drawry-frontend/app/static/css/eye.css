@@ -1,0 +1,150 @@
+.game-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+span[data-word] {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+#section-1 .help {
+  left: 70px;
+}
+
+#section-3 .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+
+#section-2,
+#section-3 {
+  display: none;
+}
+#calibrationDiv {
+  height: 100vh;
+  width: 100vw;
+  display: none;
+  position: relative;
+}
+
+.Calibration.calibrated {
+  filter: grayscale(100%);
+}
+
+.Calibration:hover {
+  opacity: 0.7;
+}
+
+#CalibrateButton {
+  position: fixed;
+  top: 20%;
+  transform: translateX(-50%);
+  left: 50%;
+  z-index: 999;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#status {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#webgazerVideoContainer {
+  position: fixed !important;
+  top: 0px !important; /* 기본적으로 왼쪽 상단 배치 */
+  left: 0px !important;
+  width: 250px !important; /* 웹캠 크기를 절반으로 축소 */
+  height: 150px !important;
+  z-index: 999;
+}
+
+#webgazerFaceFeedbackBox {
+  width: 100px !important;
+  height: 90px !important;
+}
+
+#webgazerFaceOverlay {
+  position: absolute !important;
+  width: 100px !important;
+  height: 90px !important;
+  top: -5px !important; /* 위로 10px 이동 */
+  left: 50% !important;
+  transform: translate(-50%, -10%);
+}
+
+#webgazerVideoContainer {
+  top: 0px !important;
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+
+#webgazerVideoFeed {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#sentence {
+  font-size: 40px;
+  margin-bottom: 10px; /* 기존 40px → 20px 줄이기 */
+  margin-top: 30px; /* 위 여백 줄이기 */
+  text-align: center;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+#sentence span {
+  display: inline-block; /* 단어 사이 간격 유지 */
+  margin-right: 2px; /* 단어 간격 조절 */
+}
+
+#sentence span[data-word]:last-child::after {
+  content: "\A"; /* 문장 끝에서 줄 바꿈 */
+  white-space: pre;
+}
+
+.next-btn {
+  position: absolute;
+  width: 200px;
+  height: 80px;
+  transform: translateX(-50%);
+  left: 50%;
+  font-size: 1.5rem;
+  background-color: #ff8e03;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.next-btn:hover {
+  background-color: #e07702;
+}
+
+span {
+  transition: transform 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  padding: 5px;
+}
+
+span:active {
+  transform: scale(1.5); /* 단어만 확대 */
+  color: #ff8e03;
+}

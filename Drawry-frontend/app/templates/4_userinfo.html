@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAWRY-username</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/4_userinfo.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <section id="nickname-section">
+      <div class="wrapper">
+        <div class="title">
+          <button class="listen-info-1">🎧</button>
+          별명 짓기
+        </div>
+        <div class="subtitle">
+          먼저, 멋진 별명을 지어봐요!<br />잘 기억해 둘게요.
+        </div>
+
+        <div class="input-container">
+          <input
+            type="text"
+            id="nickname-input"
+            placeholder="별명을 입력해주세요!"
+          />
+        </div>
+
+        <div class="next-btn" onclick="nextSection('birth-section')">▶︎</div>
+
+        <button id="backBtn" class="back-btn" onclick="location.href='login'">
+          ◀︎
+        </button>
+      </div>
+    </section>
+
+    <section id="birth-section">
+      <div class="wrapper">
+        <div class="title">
+          <button class="listen-info-2">🎧</button>
+          나의 생일
+        </div>
+        <div class="subtitle">
+          생일을 알려주세요!<br />정확한 문해력 분석을 위해 필요해요.
+        </div>
+
+        <div class="input-container">
+          <input type="date" id="birthday" placeholder="생일을 입력해주세요!" />
+        </div>
+
+        <div class="next-btn" onclick="location.href='/login'">
+          <div class="next-btn-text">▶︎</div>
+        </div>
+
+        <button
+          id="backBtn"
+          onclick="nextSection('nickname-section')"
+          class="back-btn"
+        >
+          ◀︎
+        </button>
+      </div>
+    </section>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/4_userinfo.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

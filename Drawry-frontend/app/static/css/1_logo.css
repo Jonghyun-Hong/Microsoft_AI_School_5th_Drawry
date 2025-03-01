@@ -1,0 +1,95 @@
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  height: 90vh;
+}
+
+.rotated-d {
+  color: #ff8e03;
+  position: absolute;
+  font-size: 9.5rem;
+  font-weight: 800;
+  top: 29%;
+  left: 24%;
+  transform: rotate(0deg);
+  opacity: 0;
+  animation: rotateD 1.2s ease-in-out forwards;
+}
+
+.dots {
+  color: #ff8e03;
+  position: absolute;
+  font-size: 8.5rem;
+  letter-spacing: -35px;
+  top: 22%;
+  left: 21.5%;
+  opacity: 0;
+  animation: showDots 1s ease-in-out 1.2s forwards;
+}
+
+.logo-text {
+  color: #ff8e03;
+  position: absolute;
+  font-size: 12rem;
+  font-weight: 800;
+  top: 25%;
+  left: 33%;
+}
+
+.logo-subtext {
+  color: #ff8e03;
+  position: absolute;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  top: 55%;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out 2s forwards;
+}
+
+.starttext {
+  position: absolute;
+  font-size: 1.5rem;
+  color: #979797;
+  top: 67%;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out 3s forwards;
+}
+
+/* 애니메이션 정의 */
+@keyframes rotateD {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(90.37deg);
+    opacity: 1;
+  }
+}
+
+@keyframes showDots {
+  0% {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

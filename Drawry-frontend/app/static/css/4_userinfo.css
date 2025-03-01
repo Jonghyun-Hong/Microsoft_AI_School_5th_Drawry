@@ -1,0 +1,112 @@
+.listen-info-1,
+.listen-info-2 {
+  border: none;
+  background: none;
+  font-size: 4rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 기본 스타일 */
+body {
+  font-family: "peach", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  margin: 0;
+  background-color: #fffff6;
+}
+.wrapper {
+  flex-direction: column;
+  font-family: "peach", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 90vh;
+  width: 1024px;
+  max-width: 100%;
+  margin: auto;
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  font-size: 4rem;
+  font-weight: 800;
+  color: black;
+}
+
+.subtitle {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #979797;
+  line-height: 40px;
+}
+
+.input-container {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translateX(-50%);
+  width: 324px;
+  height: 60px;
+  border-radius: 11px;
+  border: 2px solid #ff8e03;
+  display: flex;
+  justify-content: center;
+  background-color: #fffff6;
+  align-items: center;
+}
+
+.input-container input {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border-radius: 11px;
+  background-color: transparent;
+  color: black;
+  border: none;
+}
+.input-container input:active {
+  background-color: transparent;
+}
+.next-btn {
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3rem;
+  color: #ff8e03;
+}
+
+.back-btn {
+  position: absolute;
+  top: 1%;
+  left: -2.5%;
+  border: none;
+  background: none;
+  color: #ff8e03;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+section {
+  display: none;
+}
+
+#nickname-section {
+  display: block;
+}

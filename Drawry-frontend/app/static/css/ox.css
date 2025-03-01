@@ -1,0 +1,62 @@
+.game-section {
+  display: none;
+  text-align: center;
+  padding: 50px;
+}
+
+#section-1 .help {
+  top: -5px; /* 제목보다 약간 위쪽 */
+  left: 200px;
+}
+
+#section-2 .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+
+.text-container {
+  display: flex;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.highlight {
+  font-size: 5rem;
+  color: rgb(34, 174, 34) !important; /* 원하는 색상으로 변경 */
+}
+
+.speak-btn {
+  background: none;
+  border: none;
+  font-size: 5rem;
+  top: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  padding: 0;
+}
+
+.speak-btn:hover {
+  transform: scale(1.2);
+}
+
+.buttons-container {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  flex-wrap: wrap;
+}
+
+.animated-button {
+  width: 300px;
+  height: 300px;
+  font-size: 120px;
+  cursor: pointer;
+  background-color: #ff8e03;
+  color: #fffff6;
+  border: 3px solid #ff8e03;
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}

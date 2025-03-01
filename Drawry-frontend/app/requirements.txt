@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+jinja2
+python-multipart
+python-dotenv
+requests
+azure-cognitiveservices-speech
+pillow
+numpy
+SpeechRecognition
+pydub
+ffmpeg-python

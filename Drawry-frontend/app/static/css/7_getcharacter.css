@@ -1,0 +1,114 @@
+.listen-get-1,
+.listen-get-2,
+.listen-get-3 {
+  border: none;
+  background: none;
+  font-size: 4rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.container {
+  text-align: center;
+  width: 1024px;
+}
+
+.title {
+  font-size: 4rem;
+  margin-bottom: 5%;
+}
+
+.subtitle {
+  font-size: 2rem;
+  color: #979797;
+  margin-bottom: 1%;
+}
+
+/* 버튼 스타일 */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  background: #ff8e03;
+  color: #fffff6;
+  font-size: 1.5rem;
+  border-radius: 22px;
+  padding: 0;
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  position: relative;
+  top: 70px;
+}
+
+.btn:hover {
+  background: #ff6f00;
+}
+
+/* 뒤로가기 버튼 */
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 3rem;
+  color: #ff8e03;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0;
+}
+
+.btn-wrapper {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+/* 기본적으로 정보 상자는 숨김 */
+.info-box {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  margin-bottom: 2px; /* 버튼과 간격 */
+  transform: translateX(-50%);
+  background: #fffff6;
+  border: 5px solid #fedf50;
+  border-radius: 23px;
+  padding: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+  width: 220px;
+  color: #ff8e03;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* 말풍선 삼각형 (위 방향) */
+.info-box::after {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* 버튼 위에 뜨게 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #fedf50 transparent transparent transparent;
+}
+
+/* 마우스 오버 시 표시 */
+.btn-wrapper:hover .info-box {
+  display: block;
+}
+
+.button-wrapper2 {
+  display: flex;
+  flex-direction: column; /* 버튼을 세로 정렬 */
+  align-items: center; /* 가운데 정렬 */
+  gap: 20px; /* 버튼 사이 간격 조정 */
+}

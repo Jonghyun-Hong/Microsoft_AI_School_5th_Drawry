@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appletree Game</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/appletree.css')).replace('http://', 'https://') }}"
+    />
+
+    <style>
+      .container_tree {
+        width: 1024px;
+        height: 92vh;
+        position: relative;
+        text-align: center;
+        background-image: url("/static/images/tree.png");
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .apple {
+        background-image: url("/static/images/apples.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 70px;
+        height: 70px;
+        font-size: 1.5rem;
+        color: #fff;
+        line-height: 85px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+        position: absolute;
+        z-index: 5000;
+        display: block !important;
+        transition: transform 0.2s ease-in-out;
+      }
+      .hint {
+        background-image: url("/static/images/hint.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        border: none;
+        width: 70px;
+        height: 70px;
+        line-height: 85px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+        z-index: 5000;
+        display: block !important;
+        transition: transform 0.2s ease-in-out;
+      }
+      .make {
+        position: absolute;
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 140px;
+        height: 160px;
+        position: absolute;
+        background-color: transparent;
+        background-image: url("/static/images/jam.png");
+        background-size: cover;
+        font-size: 1.2rem;
+        text-align: left;
+        text-indent: 15px;
+        right: -15%;
+        bottom: 20px;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bg-music" autoplay loop>
+      <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+    </audio>
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpBtn" class="help">?</button>
+          <div class="title-text">사과찾기게임</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+
+    <!-- 2.  -->
+    <section id="section-2" class="game-section">
+      <div class="logo"></div>
+      <button id="helpBtn" class="help">?</button>
+      <div class="container_tree">
+        <div class="correct-word-container">
+          <button id="correctWordSpeakBtn" class="speak-btn-word">🎧</button>
+        </div>
+        <!-- 사과가 자리하는 영역 -->
+        <div class="tree" id="tree"></div>
+        <!-- 클릭한 자모를 넣어주는 공간 -->
+        <div class="jam" id="jam"></div>
+        <button id="undoBtn" class="undo">↩︎</button>
+        <button id="hintBtn" class="hint"></button>
+        <div id="hintModal" class="hint-modal">
+          <div class="hint-modal-content">
+            <p>알 라 딘</p>
+          </div>
+        </div>
+        <div id="hintModalOverlay" class="hint-modal-overlay"></div>
+        <button class="make" onclick="checkAnswer()"></button>
+        <div
+          class="modal-overlay"
+          id="modalOverlay"
+          style="display: none"
+        ></div>
+        <div class="modal" id="resultModal" style="display: none">
+          <p id="resultText"></p>
+          <button class="check-btn" onclick="confirmModal()">확 인</button>
+        </div>
+      </div>
+    </section>
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🎧 을 눌러서 단어를 들어봐! <br /><span
+            class="num"
+            >𝟮 .</span
+          >
+          🍎 를 눌러서 단어를 완성해줘. <br /><span class="num">𝟯 .</span> 🍎 를
+          잘못 눌렀으면 ↩︎를 누르면 돼 <br /><span class="num">𝟰 .</span> 다
+          완성하면 사과잼 통을 눌러줘! <br />⭐️ : 어려우면 "🍋"를 눌러봐!
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+
+    <script src="{{ str(request.url_for('static', path='/js/appletree_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

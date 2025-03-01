@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRAWRY</title>
+    <link rel="stylesheet" href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}">
+    <link rel="stylesheet" href="{{ str(request.url_for('static', path='css/1_logo.css')).replace('http://', 'https://') }}">
+ 
+</head>
+<body>
+    <div class="wrapper">
+        <div class="logo-container">
+            <div class="dots">••</div>
+            <div class="rotated-d">D</div>
+            <div class="logo-text">RAWRY</div>
+            <div class="logo-subtext">나만의 동화로 기르는 문해력</div>
+            <div class="starttext">화면을 어디든 선택해보세요!</button>
+        </div>
+    </div>
+    <script src="{{ str(request.url_for('static', path='/js/1_logo.js')).replace('http://', 'https://')}}"></script>
+</body>
+</html>
+

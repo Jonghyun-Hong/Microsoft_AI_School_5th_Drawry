@@ -1,0 +1,820 @@
+
+@router.post("/register", response_model=UserResponse)
+async def register(
+   user_data: UserCreate,
+   db: Session = Depends(get_db)
+):
+   # 이메일 중복 체크
+   if db.query(User).filter(User.email == user_data.email).first():
+       raise HTTPException(
+           status_code=400,
+           detail="Email already registered"
+       )
+   
+   # 비밀번호 검증
+   validate_password(user_data.password)
+   
+   # 새 사용자 생성
+   user = User(
+       email=user_data.email,
+       hashed_password=get_password_hash(user_data.password),
+       nickname=user_data.nickname,
+       birth_date=user_data.birth_date,
+       is_active=True
+   )
+   
+   try:
+       db.add(user)
+       db.commit()
+       db.refresh(user)
+       return user
+   except Exception as e:
+       db.rollback()
+       raise HTTPException(
+           status_code=400,
+           detail=f"Could not register user: {str(e)}"
+       )
+
+@router.post("/login", response_model=Token)
+async def login(
+   form_data: OAuth2PasswordRequestForm = Depends(),
+   db: Session = Depends(get_db)
+):
+   # 사용자 조회
+   user = db.query(User).filter(User.email == form_data.username).first()
+
+   if not user or not verify_password(form_data.password, user.hashed_password):
+       raise HTTPException(
+           status_code=status.HTTP_401_UNAUTHORIZED,
+           detail="Incorrect email or password",
+           headers={"WWW-Authenticate": "Bearer"},
+       )
+   
+   # 토큰 생성
+   access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+   access_token = create_access_token(
+       data={"sub": user.email}, expires_delta=access_token_expires
+   )
+   
+   return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/me", response_model=UserResponse)
+async def read_users_me(current_user: User = Depends(get_current_user)):
+   if not current_user.is_active:
+       raise HTTPException(status_code=400, detail="Inactive user")
+   return current_user
+
+@router.post("/test-user")
+async def create_test_user(db: Session = Depends(get_db)):
+   if not settings.DEBUG:
+       raise HTTPException(
+           status_code=404,
+           detail="Endpoint not found"
+       )
+   test_user = User(
+       email="test@example.com",
+       hashed_password=get_password_hash("testpassword123"),
+       nickname="테스트유저",
+       birth_date=datetime.now().date()
+   )
+   db.add(test_user)
+   db.commit()
+   db.refresh(test_user)
+   return {"message": "Test user created", "email": test_user.email}
+
+
+@router.post("/stories/{story_id}/games/start", response_model=GameResponse)
+async def start_game(
+    story_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db),
+    game_data: GameCreate = None
+):
+    """새로운 게임 세션을 시작합니다."""
+    if game_data is None:
+        raise DrawryException(
+            code="INVALID_REQUEST",
+            message="Game data is required",
+            status_code=400
+        )
+
+    game_service = GameService(db)
+    
+    try:
+        game = await game_service.create_game(
+            user_id=current_user.id,
+            story_id=story_id,
+            game_type=game_data.game_type
+        )
+        return game
+    except Exception as e:
+        raise DrawryException(
+            code="GAME_START_ERROR",
+            message="Failed to start game",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.put("/stories/{story_id}/games/{game_id}", response_model=GameResponse)
+async def update_game_progress(
+    story_id: int = Path(..., gt=0),
+    game_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db),
+    game_update: GameUpdate = None
+):
+    """게임 진행 상태를 업데이트합니다."""
+    if game_update is None:
+        raise DrawryException(
+            code="INVALID_REQUEST",
+            message="Game update data is required",
+            status_code=400
+        )
+
+    game_service = GameService(db)
+    
+    # 게임 소유권 확인
+    game = db.query(GameProgress).filter(
+        GameProgress.id == game_id,
+        GameProgress.user_id == current_user.id,
+        GameProgress.story_id == story_id
+    ).first()
+    
+    if not game:
+        raise DrawryException(
+            code="GAME_NOT_FOUND",
+            message="Game not found or access denied",
+            status_code=404
+        )
+
+    try:
+        updated_game = await game_service.update_progress(
+            game_id=game_id,
+            progress_data=game_update.dict(exclude_unset=True)
+        )
+        return updated_game
+    except Exception as e:
+        raise DrawryException(
+            code="GAME_UPDATE_ERROR",
+            message="Failed to update game progress",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.post("/stories/{story_id}/games/{game_id}/complete", response_model=GameResponse)
+async def complete_game(
+    story_id: int = Path(..., gt=0),
+    game_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """게임을 완료 처리합니다."""
+    game_service = GameService(db)
+    
+    # 게임 소유권 확인
+    game = db.query(GameProgress).filter(
+        GameProgress.id == game_id,
+        GameProgress.user_id == current_user.id,
+        GameProgress.story_id == story_id
+    ).first()
+    
+    if not game:
+        raise DrawryException(
+            code="GAME_NOT_FOUND",
+            message="Game not found or access denied",
+            status_code=404
+        )
+
+    try:
+        completed_game = await game_service.complete_game(game_id)
+        return completed_game
+    except Exception as e:
+        raise DrawryException(
+            code="GAME_COMPLETION_ERROR",
+            message="Failed to complete game",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.get("/stories/{story_id}/games", response_model=List[GameResponse])
+async def get_game_history(
+    story_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """사용자의 게임 기록을 조회합니다."""
+    games = db.query(GameProgress).filter(
+        GameProgress.user_id == current_user.id,
+        GameProgress.story_id == story_id
+    ).order_by(GameProgress.created_at.desc()).all()
+    
+    return games
+
+@router.get("/stories/{story_id}/games/analytics", response_model=Dict[str, Any])
+async def get_game_analytics(
+    story_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """게임 분석 데이터를 조회합니다."""
+    game_service = GameService(db)
+    eye_tracking_service = EyeTrackingService(db)
+    
+    try:
+        # 게임 분석 데이터
+        game_analytics = await game_service.get_analytics(
+            user_id=current_user.id,
+            story_id=story_id
+        )
+        
+        # 아이트래킹 분석 데이터
+        tracking_analytics = await eye_tracking_service.analyze_tracking_data(
+            user_id=current_user.id,
+            story_id=story_id
+        )
+        
+        return {
+            "game_analytics": game_analytics,
+            "tracking_analytics": tracking_analytics
+        }
+    except Exception as e:
+        raise DrawryException(
+            code="ANALYTICS_ERROR",
+            message="Failed to retrieve analytics",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+
+@router.get("/stories/{story_id}/pages", response_model=List[PageResponse])
+async def get_pages(
+    story: Story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """특정 동화책의 모든 페이지를 조회합니다."""
+    pages = db.query(Page).filter(Page.story_id == story.id).order_by(Page.page_number).all()
+    return pages
+
+@router.post("/stories/{story_id}/pages", response_model=PageResponse)
+async def create_page(
+    page_data: PageCreate,
+    story: Story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """새로운 페이지를 생성합니다."""
+    # 페이지 번호 중복 검사
+    existing_page = db.query(Page).filter(
+        Page.story_id == story.id,
+        Page.page_number == page_data.page_number
+    ).first()
+    
+    if existing_page:
+        raise DrawryException(
+            code="PAGE_NUMBER_EXISTS",
+            message=f"Page number {page_data.page_number} already exists in this story",
+            status_code=400
+        )
+
+    page = Page(
+        **page_data.dict(),
+        story_id=story.id
+    )
+    
+    try:
+        db.add(page)
+        db.commit()
+        db.refresh(page)
+        return page
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="CREATE_PAGE_ERROR",
+            message="Failed to create page",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.get("/stories/{story_id}/pages/{page_id}", response_model=PageResponse)
+async def get_page_by_id(
+    page: Page = Depends(get_page)
+):
+    """특정 페이지의 상세 정보를 조회합니다."""
+    return page
+
+@router.put("/stories/{story_id}/pages/{page_id}", response_model=PageResponse)
+async def update_page(
+    page_update: PageUpdate,
+    page: Page = Depends(get_page),
+    db: Session = Depends(get_db)
+):
+    """페이지 정보를 수정합니다."""
+    for field, value in page_update.dict(exclude_unset=True).items():
+        setattr(page, field, value)
+    
+    try:
+        db.commit()
+        db.refresh(page)
+        return page
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="UPDATE_PAGE_ERROR",
+            message="Failed to update page",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.delete("/stories/{story_id}/pages/{page_id}")
+async def delete_page(
+    page: Page = Depends(get_page),
+    db: Session = Depends(get_db)
+):
+    """페이지를 삭제합니다."""
+    try:
+        db.delete(page)
+        db.commit()
+        return {"message": "Page deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="DELETE_PAGE_ERROR",
+            message="Failed to delete page",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+
+@router.post("/stories/{story_id}/pages/{page_id}/sketch", response_model=SketchResponse)
+async def upload_sketch(
+    story_id: int = Path(..., gt=0),
+    page_id: int = Path(..., gt=0),
+    file: UploadFile = File(...),
+    prompt_data: SketchCreate = Depends(),
+    current_user: User = Depends(get_current_user),
+    page: Page = Depends(get_page),
+    db: Session = Depends(get_db),
+    storage_service: AzureStorageService = Depends(get_azure_storage),
+    prompt_generator: PromptGenerator = Depends(get_prompt_generator)
+):
+    """스케치 업로드 및 초기 데이터 생성"""
+    # 이미지 파일 검증
+    await validate_image_file(file)
+    
+    # 기존 스케치 확인
+    existing_sketch = db.query(Sketch).filter(Sketch.page_id == page_id).first()
+    if existing_sketch:
+        raise DrawryException(
+            code="SKETCH_EXISTS",
+            message="Sketch already exists for this page",
+            status_code=400
+        )
+
+    try:
+        # 스케치 이미지 업로드
+        sketch_url = await storage_service.upload_sketch(file)
+        
+        # 프롬프트 생성
+        generated_prompt = prompt_generator.generate_prompt(prompt_data.prompt_selections)
+        
+        # 스케치 데이터 생성
+        sketch = Sketch(
+            page_id=page_id,
+            original_sketch_url=sketch_url,
+            generated_image_urls=[],
+            prompt_data=generated_prompt
+        )
+        
+        db.add(sketch)
+        db.commit()
+        db.refresh(sketch)
+        
+        return sketch
+        
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="SKETCH_CREATION_ERROR",
+            message="Failed to create sketch",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.post("/stories/{story_id}/pages/{page_id}/generate", response_model=SketchResponse)
+async def generate_images(
+    story_id: int = Path(..., gt=0),
+    page_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    page: Page = Depends(get_page),
+    db: Session = Depends(get_db),
+    controlnet_service: ControlNetService = Depends(get_controlnet_service),
+    storage_service: AzureStorageService = Depends(get_azure_storage)
+):
+    """스케치를 기반으로 이미지 생성"""
+    sketch = db.query(Sketch).filter(Sketch.page_id == page_id).first()
+    if not sketch:
+        raise DrawryException(
+            code="SKETCH_NOT_FOUND",
+            message="Sketch not found",
+            status_code=404
+        )
+
+    try:
+        # ControlNet을 통한 이미지 생성
+        generated_urls = await controlnet_service.generate_images(
+            sketch_url=sketch.original_sketch_url,
+            prompt=sketch.prompt_data["final_prompt"]
+        )
+        
+        # 생성된 이미지 URL 업데이트
+        sketch.generated_image_urls = generated_urls
+        db.commit()
+        db.refresh(sketch)
+        
+        return sketch
+        
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="IMAGE_GENERATION_ERROR",
+            message="Failed to generate images",
+            status_code=500,
+            details={"error": str(e)}
+        )
+
+@router.put("/stories/{story_id}/pages/{page_id}/select-image", response_model=SketchResponse)
+async def select_image(
+    image_data: SketchUpdate,  # 기본값이 없는 매개변수를 앞으로
+    story_id: int = Path(..., gt=0),
+    page_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    page: Page = Depends(get_page),
+    db: Session = Depends(get_db)
+):
+    """생성된 이미지 중 하나를 선택"""
+    sketch = db.query(Sketch).filter(Sketch.page_id == page_id).first()
+    if not sketch:
+        raise DrawryException(
+            code="SKETCH_NOT_FOUND",
+            message="Sketch not found",
+            status_code=404
+        )
+
+    if image_data.selected_image_url not in sketch.generated_image_urls:
+        raise DrawryException(
+            code="INVALID_IMAGE_URL",
+            message="Selected image URL is not in generated images",
+            status_code=400
+        )
+
+    try:
+        sketch.selected_image_url = image_data.selected_image_url
+        db.commit()
+        db.refresh(sketch)
+        
+        return sketch
+        
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="IMAGE_SELECTION_ERROR",
+            message="Failed to select image",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+
+@router.post("/tts")
+async def text_to_speech(
+    text: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """텍스트를 음성으로 변환"""
+    tts_service = TextToSpeech()
+    audio_url, audio_data = await tts_service.generate_speech(text)
+    
+    return {
+        "status": "success",
+        "audio_url": audio_url
+    }
+
+@router.post("/stt/file")
+async def speech_to_text_file(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """음성 파일에서 텍스트 추출"""
+    stt_service = SpeechToText()
+    audio_data = await file.read()
+    recognized_text = await stt_service.recognize_from_file(audio_data)
+    
+    return {
+        "status": "success",
+        "text": recognized_text
+    }
+
+@router.post("/stt/stream")
+async def speech_to_text_stream(
+    audio_data: bytes,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """실시간 음성 스트림에서 텍스트 추출"""
+    stt_service = SpeechToText()
+    recognized_text = await stt_service.recognize_stream(audio_data)
+    
+    return {
+        "status": "success",
+        "text": recognized_text
+    }
+
+
+@router.get("", response_model=List[StoryResponse])
+async def get_stories(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """사용자의 모든 동화책 목록을 조회합니다."""
+    stories = db.query(Story).filter(Story.user_id == current_user.id).all()
+    return stories
+
+@router.post("", response_model=StoryResponse)
+async def create_story(
+    story_data: StoryCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """새로운 동화책을 생성합니다."""
+    story = Story(
+        **story_data.dict(),
+        user_id=current_user.id
+    )
+    try:
+        db.add(story)
+        db.commit()
+        db.refresh(story)
+        return story
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="CREATE_STORY_ERROR",
+            message="Failed to create story",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.get("/{story_id}", response_model=StoryResponse)
+async def get_story_by_id(
+    story: Story = Depends(get_story)
+):
+    """특정 동화책의 상세 정보를 조회합니다."""
+    return story
+
+@router.put("/{story_id}", response_model=StoryResponse)
+async def update_story(
+    story_update: StoryUpdate,
+    story: Story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """동화책 정보를 수정합니다."""
+    for field, value in story_update.dict(exclude_unset=True).items():
+        setattr(story, field, value)
+    
+    try:
+        db.commit()
+        db.refresh(story)
+        return story
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="UPDATE_STORY_ERROR",
+            message="Failed to update story",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+@router.delete("/{story_id}")
+async def delete_story(
+    story: Story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """동화책을 삭제합니다."""
+    try:
+        db.delete(story)
+        db.commit()
+        return {"message": "Story deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="DELETE_STORY_ERROR",
+            message="Failed to delete story",
+            status_code=400,
+            details={"error": str(e)}
+        )
+
+
+@router.post("/generate")
+async def generate_story(
+    prompt_data: Dict[str, Any],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """새로운 스토리 생성"""
+    generator = StoryGenerator()
+    result = await generator.generate_story(prompt_data)
+    
+    return {
+        "status": "success",
+        "data": result
+    }
+
+@router.post("/modify")
+async def modify_story(
+    story_id: int,
+    modifications: Dict[str, Any],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """기존 스토리 수정"""
+    # 스토리 조회
+    story = db.query(Story).filter(
+        Story.id == story_id,
+        Story.user_id == current_user.id
+    ).first()
+    
+    if not story:
+        raise DrawryException(
+            code="STORY_NOT_FOUND",
+            message="Story not found",
+            status_code=404
+        )
+    
+    generator = StoryGenerator()
+    result = await generator.modify_story(
+        original_content=story.content,
+        modifications=modifications
+    )
+    
+    return {
+        "status": "success",
+        "data": result
+    }
+
+
+@router.post("/stories/{story_id}/pages/{page_id}/tracking")
+async def record_gaze_data(
+    gaze_data: GazePoint,  # 기본값이 없는 파라미터를 앞으로
+    story_id: int = Path(..., gt=0),
+    page_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """실시간 시선 추적 데이터 기록"""
+    collector = TrackingCollector(db)
+    
+    try:
+        metrics = await collector.process_gaze_data(
+            user_id=current_user.id,
+            story_id=story_id,
+            page_id=page_id,
+            gaze_point=gaze_data
+        )
+        
+        return {"status": "success", "metrics": metrics}
+    except Exception as e:
+        raise DrawryException(
+            code="TRACKING_RECORD_ERROR",
+            message="Failed to record gaze data",
+            status_code=500,
+            details={"error": str(e)}
+        )
+
+@router.post("/stories/{story_id}/pages/{page_id}/tracking/session/complete")
+async def complete_tracking_session(
+    tracking_data: TrackingData,  # 기본값이 없는 파라미터를 앞으로
+    story_id: int = Path(..., gt=0),
+    page_id: int = Path(..., gt=0),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """읽기 세션 완료 및 데이터 저장"""
+    collector = TrackingCollector(db)
+    analyzer = TrackingAnalyzer(db)
+    
+    try:
+        # 세션 데이터 저장
+        session_data = await collector.save_session_data(tracking_data)
+        
+        # 세션 분석
+        analysis = await analyzer.analyze_reading_session(
+            user_id=current_user.id,
+            story_id=story_id,
+            session_id=tracking_data.session_id
+        )
+        
+        return {
+            "status": "success",
+            "session_data": session_data,
+            "analysis": analysis
+        }
+    except Exception as e:
+        raise DrawryException(
+            code="SESSION_COMPLETION_ERROR",
+            message="Failed to complete tracking session",
+            status_code=500,
+            details={"error": str(e)}
+        )
+
+@router.get("/stories/{story_id}/tracking/analytics")
+async def get_tracking_analytics(
+    story_id: int = Path(..., gt=0),
+    time_range: Optional[int] = Query(30, gt=0, description="분석 기간(일)"),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """읽기 분석 데이터 조회"""
+    analyzer = TrackingAnalyzer(db)
+    
+    try:
+        progress_analysis = await analyzer.analyze_user_progress(
+            user_id=current_user.id,
+            story_id=story_id,
+            time_range=time_range
+        )
+        
+        return progress_analysis
+    except Exception as e:
+        raise DrawryException(
+            code="ANALYTICS_ERROR",
+            message="Failed to retrieve analytics",
+            status_code=500,
+            details={"error": str(e)}
+        )
+
+@router.get("/stories/{story_id}/tracking/sessions/{session_id}")
+async def get_session_analysis(
+    story_id: int = Path(..., gt=0),
+    session_id: str = Path(...),
+    current_user: User = Depends(get_current_user),
+    story = Depends(get_story),
+    db: Session = Depends(get_db)
+):
+    """특정 세션의 상세 분석 데이터 조회"""
+    analyzer = TrackingAnalyzer(db)
+    
+    try:
+        session_analysis = await analyzer.analyze_reading_session(
+            user_id=current_user.id,
+            story_id=story_id,
+            session_id=session_id
+        )
+        
+        return session_analysis
+    except Exception as e:
+        raise DrawryException(
+            code="SESSION_ANALYSIS_ERROR",
+            message="Failed to retrieve session analysis",
+            status_code=500,
+            details={"error": str(e)}
+        )
+
+
+@router.get("/me", response_model=UserResponse)
+async def read_user_me(
+    current_user: User = Depends(get_current_user)
+):
+    """현재 로그인한 사용자의 정보를 조회합니다."""
+    return current_user
+
+@router.put("/me", response_model=UserResponse)
+async def update_user_me(
+    user_update: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """현재 로그인한 사용자의 정보를 수정합니다."""
+    for field, value in user_update.dict(exclude_unset=True).items():
+        setattr(current_user, field, value)
+    
+    try:
+        db.commit()
+        db.refresh(current_user)
+    except Exception as e:
+        db.rollback()
+        raise DrawryException(
+            code="UPDATE_USER_ERROR",
+            message="Failed to update user information",
+            status_code=400,
+            details={"error": str(e)}
+        )
+    
+    return current_user

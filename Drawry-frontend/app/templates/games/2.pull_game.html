@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pull Game</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/pull.css')).replace('http://', 'https://')}}"
+    />
+  </head>
+  <body>
+    <audio id="bg-music" autoplay loop>
+      <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+    </audio>
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpBtn" class="help">?</button>
+          <div class="title-text">귀쫑긋🎵게임</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+
+    <section id="section-2" class="game-section">
+      <div class="logo"></div>
+      <button id="helpBtn" class="help">?</button>
+      <div class="text-container">
+        <button id="speakWord" class="speak-btn-word">🎧</button>
+      </div>
+      <div class="game-layout">
+        <div
+          class="hangul-display"
+          id="hangul-display"
+          ondrop="drop(event)"
+          ondragover="allowDrop(event)"
+        ></div>
+      </div>
+
+      <div class="bottom-container">
+        <div class="draggable-container">
+          <div class="draggable-row" id="draggable-first"></div>
+          <div class="draggable-row" id="draggable-third"></div>
+        </div>
+
+        <button class="hint-container" id="hintBtn">🖱️</button>
+      </div>
+
+      <div id="customModal" class="modal">
+        <p id="modalMessage"></p>
+        <button id="modalCloseBtn" class="check-btn">확 인</button>
+        <button
+          id="nextGameBtn"
+          class="check-btn"
+          style="display: none"
+        ></button>
+      </div>
+      <div id="modalOverlay" class="modal-overlay"></div>
+
+      <div id="hintModal" class="hint-modal">
+        <div class="hint-modal-content">
+          <p class="hint-text">알 라 딘</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🎧 를 눌러서 소리를 들어줘. <br /><span
+            class="num"
+            >𝟮 .</span
+          >
+          들은 단어를 만들어야 해 ! <br /><span class="num">𝟯 .</span> 🟧 를
+          노란색 네모 상자에 가져와줘 ! <br /><span class="num">𝟰 .</span>
+          상자에 단어가 모두 모였으면 방향을 맞춰보자 🔄 . <br /><span
+            class="num"
+            >𝟱 .</span
+          >
+          🟧 가 🟩 으로 바뀌면 완성이야 ! <br /><span class="num">𝟲 .</span> 🟥
+          가 나오면 🟥 를 한 번 더 눌러서 없애줘 !
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/pull_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

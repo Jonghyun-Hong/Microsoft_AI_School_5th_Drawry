@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0"
+    />
+
+    <title>DRAWRY-Chat Story</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/11_storyopenai.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="header">🎨 그림과 어울리는 내용을 함께 만들어 보자!</div>
+      <div class="chat-box">
+        <div class="chat-message left">
+          <img
+            class="icon"
+            src="{{ str(request.url_for('static', path='/images/main/drawryFace.png')).replace('http://', 'https://') }}"
+            alt="드로리 페이스"
+          />
+          <div class="bubble" id="Hello">
+            <div class="tail left"></div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="userbutton"
+        style="display: flex; justify-content: center; align-items: center"
+      >
+        <button
+          id="yes"
+          style="
+            margin-bottom: 10px;
+            width: 110px;
+            height: 73px;
+            color: #fffff6;
+            font-size: 20px;
+            background: #ff8e03;
+            border-radius: 36px;
+            border: 4px #ff8e03 solid;
+            cursor: pointer;
+          "
+        >
+          좋아!
+        </button>
+
+        <button
+          id="right"
+          style="
+            margin-bottom: 10px;
+            display: none;
+            width: 110px;
+            height: 73px;
+            color: #fffff6;
+            font-size: 20px;
+            background: #ff8e03;
+            border-radius: 36px;
+            border: 4px #ff8e03 solid;
+            cursor: pointer;
+          "
+        >
+          맞아!
+        </button>
+
+        <button
+          id="finish"
+          style="
+            margin-bottom: 10px;
+            display: none;
+            width: 300px;
+            height: 73px;
+            color: #fffff6;
+            text-align: center;
+            font-size: 20px;
+            background: #ff8e03;
+            border-radius: 36px;
+            border: 4px #ff8e03 solid;
+            cursor: pointer;
+          "
+        >
+          이제 마무리를 지어줘!
+        </button>
+
+        <button
+          id="next"
+          style="
+            display: none;
+            width: 300px;
+            height: 73px;
+            color: #fffff6;
+            text-align: center;
+            font-size: 20px;
+            background: #fedf50;
+            border-radius: 36px;
+            border: 4px #fedf50 solid;
+            cursor: pointer;
+          "
+        >
+          고마워!
+        </button>
+      </div>
+
+      <div class="input-area" style="display: none">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="이곳을 눌러 로리와 대화해 봐 !"
+        />
+        <button class="mic">🎤</button>
+        <button class="send">전송</button>
+      </div>
+    </div>
+
+    <!-- 환경 변수를 JavaScript 변수로 설정 -->
+    <script>
+      // FastAPI에서 전달받은 환경변수 값을 JavaScript 변수로 설정
+      const apiKey = "";
+      const endpoint = "";
+      const deploymentId = "";
+      const apiVersion = "";
+
+      const searchEndpoint = "";
+      const searchIndex = "";
+      const searchKey = "";
+
+      // 디버깅을 위한 로깅
+      console.log("환경 변수 로드 완료:");
+      console.log("API 키:", apiKey ? "설정됨" : "설정되지 않음");
+      console.log("엔드포인트:", endpoint);
+      console.log("모델 배포 ID:", deploymentId);
+      console.log("API 버전:", apiVersion);
+      const drawryicon =
+        "{{ str(request.url_for('static', path='/images/main/drawryFace.png')).replace('http://', 'https://') }}";
+    </script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/11_storyopenai.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

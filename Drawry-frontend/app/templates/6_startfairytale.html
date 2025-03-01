@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>카드 애니메이션</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/6_startfairytale.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <div class="container" id="section-1">
+      <div class="logo"></div>
+      <div class="choice-text">
+        동화책을 선택해줘
+        <button class="listen-icon" id="playStoryAudio">🎧</button>
+      </div>
+      <div class="carousel">
+        <button class="nav-btn" id="prev">◀︎</button>
+        <div class="card-container">
+          <div class="card" id="card1">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card2">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card3">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card4">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card5">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card6">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card7">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card8">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card9">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="card10">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+        </div>
+        <button class="nav-btn" id="next">▶︎</button>
+      </div>
+      <button class="select-btn" id="selectStory">선택</button>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal" id="modal">
+      <p id="modalText"></p>
+      <button class="check-btn" id="closeModal">확인</button>
+    </div>
+
+    <div class="container" id="section-2" style="display: none">
+      <div class="logo"></div>
+      <div class="choice-text">
+        캐릭터를 선택해줘
+        <button class="listen-icon" id="playCharacterAudio">🎧</button>
+      </div>
+      <div class="carousel">
+        <button class="nav-btn" id="prev">◀︎</button>
+        <div class="card-container">
+          <div class="card" id="char1">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="char2">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="char3">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="char4">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+          <div class="card" id="char5">
+            <img class="card-img" />
+            <span class="card-text"></span>
+          </div>
+        </div>
+        <button class="nav-btn" id="next">▶︎</button>
+      </div>
+      <button class="select-btn" id="selectCharacter">선택</button>
+    </div>
+    <script>
+      const storyNames = [
+        "알라딘과 요술램프",
+        "피터팬",
+        "장화신은고양이",
+        "빨간망토",
+        "헨젤과그레텔",
+        "피노키오",
+        "이상한나라의앨리스",
+        "신데렐라",
+        "백설공주",
+        "인어공주",
+      ];
+      const drawryicon =
+        "{{ str(request.url_for('static', path='/images/main/drawryFace.png')).replace('http://', 'https://') }}";
+      const characterNames = ["알라딘", "지니", "자스민", "자파", "술탄"];
+      const storyImages = [
+        "{{ str(request.url_for('static', path='/images/choice/aladdin_genie.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/peterpan.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/puss_in_boots.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/redmangto.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/hansel_gretel.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/pinocchio.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/alice.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/cindellera.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/snow_white.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/mermaid.png')).replace('http://','https://') }}",
+      ];
+      const characterImages = [
+        "{{ str(request.url_for('static', path='/images/choice/char/aladdin.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/char/genie.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/char/jasmine.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/char/japa.png')).replace('http://','https://') }}",
+        "{{ str(request.url_for('static', path='/images/choice/char/sultan.png')).replace('http://','https://') }}",
+      ];
+    </script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/6_startfairytale.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

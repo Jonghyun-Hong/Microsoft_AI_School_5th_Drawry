@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAWRY-readFairytale</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/13_readfairytale.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <section id="main-content">
+      <div class="container">
+        <div class="background"></div>
+        <div class="content">
+          <button
+            id="done"
+            class="finish"
+            onclick="window.location.href='/score'"
+          >
+            ✌🏻
+          </button>
+
+          <div class="drawing-box"></div>
+          <div class="text" id="story-container">문장을 불러오는 중...</div>
+
+          <div id="audio-controls">
+            <button id="audio-btn" class="audio-btn">🎧</button>
+          </div>
+
+          <audio id="audio-player">📢</audio>
+        </div>
+      </div>
+    </section>
+    <script
+      type="module"
+      src="{{ str(request.url_for('static', path='/js/config.js')).replace('http://', 'https://')}}"
+    ></script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/12.fairytale.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

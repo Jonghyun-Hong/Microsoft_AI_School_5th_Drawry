@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>speak Game</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/read.css')).replace('http://', 'https://')}}"
+    />
+  </head>
+  <body>
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpBtn" class="help">?</button>
+          <div class="title-text">듣고!말하고!</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+
+    <section id="section-2" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <button id="helpBtn" class="help">?</button>
+        <p class="intro-text">
+          아래 문장을 따라 읽어보자.
+          <button id="speakRead" class="speak-btn-read">🎧</button>
+        </p>
+
+        <div class="button-container">
+          <!-- <button class="change-btn" onclick="changeRandomSentence()">🔄</button> -->
+        </div>
+        <div class="game-word" id="text-container"></div>
+
+        <p id="accuracy"></p>
+        <audio id="audio-player">📢</audio>
+
+        <button id="nextBtn" class="next-btn">다 했어!</button>
+      </div>
+    </section>
+    <!-- 3섹션 추가 -->
+    <section id="section-3" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <button id="helpBtn" class="help">?</button>
+        <p class="intro-text">
+          아래 문장을 따라 읽어보자.
+          <button
+            class="speak-btn-read"
+            onclick="speakTextWithAzure('아래 문장을 따라 읽어보자')"
+          >
+            🎧
+          </button>
+        </p>
+        <div class="game-word" id="all-text-container"></div>
+
+        <p id="accuracy"></p>
+        <audio id="audio-player"></audio>
+
+        <button id="nextBtnSection3" class="next-btn">다 했어!</button>
+      </div>
+    </section>
+
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 동화책에서 만든 문장을 우리 읽어보자 😎 .
+          <br /><span class="num">𝟮 .</span> 🎧 를 눌러서 각 문장을 들어봐 !
+          <br /><span class="num">𝟯 .</span> 🎤 를 눌러서 각 문장을 읽어줘 !
+          <br />
+          👀 : 문장을 다 읽어봐야지만 다음으로 넘어갈 수 있어 !
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+
+    <div id="modalOverlay" class="modal-overlay"></div>
+    <div id="resultModal" class="modal">
+      <p id="resultText"></p>
+      <button onclick="confirmModal()" id="confirmButton" class="check-btn">
+        확인
+      </button>
+    </div>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/read_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

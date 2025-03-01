@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DRAWRY Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/3_login.css')).replace('http://', 'https://') }}"
+    />
+    <!-- <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script> -->
+    <!-- axios 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="logo-container">
+        <div class="dots">••</div>
+        <div class="rotated-d">D</div>
+        <div class="logo-text">RAWRY</div>
+      </div>
+      <div class="login-container">
+        <!-- 이메일 로그인 폼 추가 -->
+        <form class="login-form">
+          <input type="email" id="email" placeholder="이메일" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="비밀번호"
+            required
+          />
+          <button type="submit" class="email-login-btn">이메일로 로그인</button>
+          <a href="/register" class="register-link"
+            >계정이 없으신가요? 회원가입</a
+          >
+        </form>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ str(request.url_for('static', path='js/3_login.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

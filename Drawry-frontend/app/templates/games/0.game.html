@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <style>
+    .speak-btn-game {
+        padding: 0;
+        background: none;
+        border: none;
+        font-size: 90px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+      
+      .speak-btn-game:hover {
+        transform: scale(1.2);
+      }
+        .titlecontainer{
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .help{
+            transform: translateX(-50%);
+            left: 18%;
+            cursor: pointer;
+        }
+        .subtitle{
+            color: #979797;
+            font-size: 1.8rem;
+            margin-bottom: 70px;
+        }
+        .speak-btn-game {
+            cursor: pointer;
+            padding: 0;
+        }
+        .start {
+            position: relative;
+            cursor: pointer;
+        }.help::after,
+        .speak-btn-game::after,
+        .start::after {
+            content: attr(data-tooltip); /* 버튼에 설정한 툴팁 내용 */
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: none;
+            padding: 5px 10px;
+            color:black;
+            border: 2px solid #ff8e03;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* 툴팁 활성화 */
+        .help:hover::after,
+        .speak-btn-game:hover::after,
+        .start:hover::after {
+            opacity: 1;
+            visibility: visible;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" autoplay loop>
+      <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+    </audio>
+    <div class="container">
+    <div class="logo"></div>
+    <div class="titlecontainer">
+        <button id="helpBtn" class="help" data-tooltip="도움말">?</button>
+        <div class="title-text">학습게임</div>
+        <button id="speakIntro" class="speak-btn-game" data-tooltip="소개 듣기">🎧</button>
+    </div>
+    <div class="subtitle"></div>
+    <button id="startBtn" class="start" data-tooltip="게임 시작">시작</button>
+</div>
+      </section>
+  <script>
+
+document.addEventListener(
+        "click",
+        function () {
+          let bgMusic = document.getElementById("bg-music");
+          bgMusic.volume = 0.05;
+          bgMusic.play();
+        },
+        { once: true }
+      );
+
+
+    document.querySelector(".speak-btn-game").addEventListener("pointerdown", () => {
+  speakTextWithAzure("학습게임. 우리 동화책을 만들기 전에 잠깐 게임을 하러 가볼까?")
+});
+document.querySelector("#startBtn").addEventListener("click", () => {
+        window.location.href = "/appletree"; // 클릭 시 페이지 이동
+    });
+  </script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+</body>
+</html>

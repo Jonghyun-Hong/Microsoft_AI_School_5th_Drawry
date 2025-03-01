@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRAWRY-readFairytale</title>
+    <style>
+        body {
+            background: #FFFFF6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        /* book-cover 섹션 */
+        #book-cover {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #FFFFF6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .container1 {
+            width: 1024px;
+            height: 768px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bookcoverframe {
+            width: 509px;
+            height: 721px;
+            border-radius: 11px;
+            border: 9px solid #FF8E03;
+        }
+        .read-btn {
+            border: none;
+            width: 235px;
+            height: 64px;
+            background: #FEDF50;
+            border-radius: 50px;
+            color: #FFFFF6;
+            font-size: 36px;
+            font-family: Inter, sans-serif;
+            font-weight: 800;
+            position: absolute;
+            bottom: 20px;
+            right: -80px;
+            cursor: pointer;
+        }
+
+        /*동화 내용 표시 섹션*/
+
+        .container {
+            width: 1237px;
+            height: 855px;
+            position: relative;
+        }
+
+        /* 배경 스타일 */
+        .background {
+            width: 100%;
+            height: 100%;
+            background: #FF8E03;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* 콘텐츠 스타일 */
+        .content {
+            width: 95%;
+            height: 93%;
+            background: #FFFFF6;
+            position: absolute;
+            top: 4%;
+            left: 2%;
+        }
+
+        /* 버튼 공통 스타일 */
+        .next-button {
+            width: 78px;
+            height: 76px;
+            position: absolute;
+            border-radius: 50%;
+            border: 10px solid #FEDF50;
+            background: none;
+            color: #FEDF50;
+            font-size: 50px;
+            font-family: Inter, sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            text-align: center;
+            line-height: 40px;
+            padding: 0px 10px 10px 10px;
+            outline: none;
+        }
+
+        /* 왼쪽 버튼 스타일 */
+        #next-left {
+            left: 60%;
+            top: 85%;
+            padding: 0px 10px 10px 0px;
+        }
+
+        /* 오른쪽 버튼 스타일 */
+        #next-right {
+            left: 84%;
+            top: 85%;
+        }
+
+        /* '결과 보러가기' 버튼 스타일 */
+        #done {
+            width: 240px;
+            height: 76px;
+            background: #FEDF50;
+            border-radius: 50px;
+            color: #FFFFF6;
+            font-size: 26px;
+            font-family: Inter;
+            font-weight: 800;
+            word-wrap: break-word;
+            position: absolute;
+            left: 75%;
+            top: 85%;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* 프레임 스타일 */
+        .frame {
+            width: 550px;
+            height: 700px;
+            position: absolute;
+            left: 60px;
+            top: 80px;
+            border-radius: 11px;
+            border: 2px solid #FF8E03;
+        }
+
+        /* 텍스트 스타일 */
+        .text {
+            width: 481px;
+            height: 43px;
+            position: absolute;
+            left: 710px;
+            top: 150px;
+            color: black;
+            font-size: 20px;
+            font-family: Inter, sans-serif;
+            font-weight: 800;
+            word-wrap: break-word;
+        }
+
+        /* 페이드아웃 애니메이션 (선택 사항) */
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- book-cover 섹션 -->
+    <section id="book-cover">
+        <div class="container1">
+            <div class="bookcoverframe"></div>
+            <button class="read-btn">동화 읽기</button>
+        </div>
+    </section>
+
+    <!-- 기존 콘텐츠 (다음 화면) -->
+    <section id="main-content" style="display: none;">
+        <div class="container">
+            <div class="background"></div>
+            <div class="content"></div>
+            <button id="next-right" class="next-button">
+                ▶
+            </button>
+            <button id="next-left" class="next-button">
+                ◀
+            </button>
+            <button id="done">
+                결과보러가기
+            </button>
+    
+            <div class="frame"></div>
+            <div class="text"></div>
+        </div>
+    </section>
+
+    <script>
+        // '동화 읽기' 버튼 클릭 시 book-cover 섹션 숨기기
+        document.querySelector('.read-btn').addEventListener('click', () => {
+            const bookCover = document.getElementById('book-cover');
+            const mainContent = document.getElementById('main-content');
+     
+            // 페이드아웃 애니메이션 추가 (선택 사항)
+            bookCover.classList.add('fade-out');
+            setTimeout(() => {
+                bookCover.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 500); // 애니메이션 시간에 맞춰 0.5초 후에 숨김
+        });
+     
+        // localStorage에서 저장된 응답들을 불러와 contents 배열 구성
+        let contents = [];
+        let i = 1;
+     
+        // localStorage에서 각 응답을 순차적으로 불러옴
+        while (true) {
+            const response = localStorage.getItem(`storyResponse_${i}`);
+            if (!response) break;
+            contents.push(response);
+            i++;
+        }
+     
+        // contents 배열이 비어있는 경우 처리
+        if (contents.length === 0) {
+            contents = ["저장된 이야기가 없습니다."];
+            console.error("localStorage에서 이야기를 불러올 수 없습니다.");
+        }
+     
+        // 현재 보여지는 콘텐츠의 인덱스
+        let currentIndex = 0;
+     
+        // 콘텐츠를 표시할 요소 가져오기
+        const textElement = document.querySelector('.text');
+     
+        // 버튼 요소 가져오기
+        const nextLeft = document.getElementById('next-left');
+        const nextRight = document.getElementById('next-right');
+        const done = document.getElementById('done');
+     
+        // 초기 콘텐츠 설정 및 버튼 상태 업데이트
+        textElement.innerHTML = contents[currentIndex];
+        updateButtons();
+     
+        // 다음 콘텐츠로 이동 (오른쪽 버튼 클릭 시)
+        nextRight.addEventListener('click', () => {
+            currentIndex++;
+            textElement.innerHTML = contents[currentIndex];
+            updateButtons();
+        });
+     
+        // 이전 콘텐츠로 이동 (왼쪽 버튼 클릭 시)
+        nextLeft.addEventListener('click', () => {
+            currentIndex--;
+            textElement.innerHTML = contents[currentIndex];
+            updateButtons();
+        });
+     
+        // 결과보러가기 버튼 ==> 분석 결과 보러가기 
+        done.addEventListener('click', () => {
+            location.href= '/score';
+        });
+     
+        // 버튼 상태 업데이트 함수
+        function updateButtons() {
+            // 첫 번째 장면
+            if (currentIndex === 0) {
+                nextLeft.style.display = 'none';
+                nextRight.style.display = 'block';
+                done.style.display = 'none';
+            } 
+            // 마지막 장면
+            else if (currentIndex === contents.length - 1) {
+                nextLeft.style.display = 'block';
+                nextRight.style.display = 'none';
+                done.style.display = 'block';
+            } 
+            // 중간 장면
+            else {
+                nextLeft.style.display = 'block';
+                nextRight.style.display = 'block';
+                done.style.display = 'none';
+            }
+        }
+     </script>
+</body>
+</html>

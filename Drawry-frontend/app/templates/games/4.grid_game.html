@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Game</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/grid.css')).replace('http://', 'https://')}}"
+    />
+  </head>
+  <body>
+    <audio id="bg-music" autoplay loop>
+      <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+    </audio>
+    <section id="startScreen">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpButton" class="help">?</button>
+          <div class="title-text">숨은단어찾기</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startGameButton" class="start">시작</button>
+      </div>
+    </section>
+    <section id="gameScreen" class="hidden">
+      <div class="container">
+        <div class="logo"></div>
+        <button id="helpButton" class="help">?</button>
+        <div class="text-container">
+          <button id="listenButton" class="speak-btn-word">🎧</button>
+          <div id="targetWordDisplay" class="intro-text"></div>
+        </div>
+
+        <div class="grid-container">
+          <div id="grid" class="grid"></div>
+        </div>
+        <div id="resetModal" class="modal">
+          <p id="modalMessage"></p>
+          <button id="checkButton" class="modal-btn">응 !</button>
+        </div>
+        <div id="modalOverlay" class="modal-overlay"></div>
+      </div>
+
+      <div id="customModal" class="modal">
+        <p id="modalMessage">이제 카드를 눌러서 방향을 맞춰볼까 ?</p>
+        <button id="modalCloseBtn" class="check-btn">확인</button>
+      </div>
+      <div id="modalOverlay" class="modal-overlay"></div>
+    </section>
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="closeModalButton" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🎧 을 누르면 단어를 들을 수 있어.
+          <br /><span class="num">𝟮 .</span> 글자 속에서 방금 들은 단어를
+          순서대로 찾아줘 🔍
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/grid_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAWRY</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/2_intro.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <section id="intro1">
+      <div class="wrapper">
+        <div class="icon-box">
+          <div class="icon filled"></div>
+          <div class="icon outline"></div>
+          <div class="icon outline"></div>
+        </div>
+        <div class="title">
+          <button class="listen-intro-1">🎧</button> 문해력이란 무엇이며 왜
+          중요할까요?
+        </div>
+        <div class="description">
+          우리 아이 혹은 본인이 글을 읽어보게 되었을 때<br />
+          한번에 이해하기 어려운 상황을 겪고 있나요?<br />
+          그렇다면 잘 찾아오셨어요!
+        </div>
+        <button class="next-button" onclick="nextSection(1)">다음</button>
+      </div>
+    </section>
+
+    <section id="intro2">
+      <div class="wrapper">
+        <div class="icon-box">
+          <div class="icon outline"></div>
+          <div class="icon filled"></div>
+          <div class="icon outline"></div>
+        </div>
+        <div class="title">
+          <button class="listen-intro-2">🎧</button> 글을 읽는 것은 사실, 무척
+          재미있어요.
+        </div>
+        <div class="description">
+          소설은 멋진 주인공이 되는 걸 상상하게 해주고,<br />
+          신문 기사는 시대의 생각들을 알려주고,<br />
+          편지는 상대방의 감정을 공감하게 해줘요.
+        </div>
+        <button class="next-button" onclick="nextSection(2)">다음</button>
+      </div>
+    </section>
+
+    <section id="intro3">
+      <div class="wrapper">
+        <div class="icon-box">
+          <div class="icon outline"></div>
+          <div class="icon outline"></div>
+          <div class="icon filled"></div>
+        </div>
+        <div class="title">
+          <button class="listen-intro-3">🎧</button> 나만의 그림, 나만의 글,
+          나만의 동화책!
+        </div>
+        <div class="description">
+          '드로리' 를 이용하여 내가 상상한 그림을 그리고,<br />
+          나의 그림과 어울리는 내용을 AI와 함께 만들어<br />
+          나만의 동화책을 가져보아요!
+        </div>
+        <button class="next-button" onclick="location.href='login'">
+          다음
+        </button>
+      </div>
+    </section>
+    <script src="{{ str(request.url_for('static', path='js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='js/2_intro.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAWRY-Drawing</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/7_getcharacter.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <section id="when">
+      <div class="container">
+        <div class="title">
+          <button class="listen-get-1">🎧</button> 시작할 내용을 구성해볼까 ?
+        </div>
+        <div class="subtitle">먼저 시간대를 알려줘!</div>
+        <div class="btn-container">
+          <button id="morning" class="btn">낮 ☀️</button>
+          <button id="night" class="btn">밤 🌙</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="where">
+      <div class="container">
+        <div class="title">
+          <button class="listen-get-2">🎧</button> 시작할 내용을 구성해볼까 ?
+        </div>
+        <div class="subtitle">주인공이 어디에 있는지 알려줘!</div>
+        <div class="btn-wrapper">
+          <button id="op1Btn" class="btn">아그라바</button>
+          <div id="agraba" class="info-box">가상의 도시 🌇</div>
+        </div>
+
+        <div class="btn-wrapper">
+          <button id="op2Btn" class="btn">시장</button>
+          <div id="market" class="info-box">알라딘이 사는 곳 🧺</div>
+        </div>
+
+        <div class="btn-wrapper">
+          <button id="op3Btn" class="btn">왕궁</button>
+          <div id="castle" class="info-box">공주가 사는 웅장한 성 🕌</div>
+        </div>
+
+        <div class="btn-wrapper">
+          <button id="op4Btn" class="btn">마법의 동굴</button>
+          <div id="cave" class="info-box">램프가 있는 신비한 동굴 🌌</div>
+        </div>
+
+        <div class="btn-wrapper">
+          <button id="op5Btn" class="btn">지니의 세계</button>
+          <div id="genie" class="info-box">지니의 마법공간 🧞</div>
+        </div>
+        <button id="backBtn" class="back-btn">◀︎</button>
+      </div>
+    </section>
+
+    <section id="what">
+      <div class="container">
+        <div class="title">
+          <button class="listen-get-3">🎧</button> 시작할 내용을 구성해볼까 ?
+        </div>
+        <div class="subtitle">주인공이 무엇을 하는지 알려줘 !</div>
+
+        <div class="button-wrapper2">
+          <button id="magic-lamp" class="btn" style="width: 500px">
+            마법의 램프로 세가지 소원을 빌기 시작했어 !
+          </button>
+          <button id="treasure" class="btn" style="width: 500px">
+            반짝이는 보물을 발견했어 !
+          </button>
+          <button id="magic-carpet" class="btn" style="width: 500px">
+            마법의 양탄자를 타고 날아다니고 있어 !
+          </button>
+        </div>
+        <button id="backBtn" class="back-btn">◀︎</button>
+      </div>
+    </section>
+
+    <script src="{{ str(request.url_for('static', path='js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/7_getcharacter.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

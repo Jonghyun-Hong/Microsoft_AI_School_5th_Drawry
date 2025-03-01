@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="kor" dir="Itr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAWRY-Make Img</title>
+    <style>
+      @font-face {
+        font-family: "peach", sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        src: url("/static/fonts/PeachMarket-Regular.woff") format("woff");
+      }
+
+      body {
+        font-family: "peach", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 90vh;
+        margin: 0;
+        background-color: #fffff6;
+        overflow: hidden;
+        flex-direction: column;
+      }
+
+      /*공통 레이아웃*/
+      .container {
+        text-align: center;
+        width: 1024px;
+        height: 50vh;
+        max-height: 50vh;
+        flex-direction: column;
+        justify-content: center;
+        max-height: none;
+      }
+
+      .title {
+        font-size: 2.5rem;
+        line-height: 80px;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+
+      .subtitle {
+        font-size: 20px;
+        color: #979797;
+        margin-bottom: 40px;
+      }
+
+      /*버튼 스타일*/
+      .btn-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .btn {
+        border: none;
+        background: #ff8e03;
+        color: #fffff6;
+        width: 200px;
+        font-size: 2rem;
+        font-weight: 800;
+        border-radius: 22px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background 0.3s;
+        position: relative;
+        margin-top: 50px;
+      }
+
+      .btn:hover {
+        background: #ff6f00;
+      }
+
+      .select-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .select-box {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        width: 391px;
+        height: 340px;
+        background: #fffff6;
+        /* border-radius: 11px; */
+        /* border: 2px solid #ff8e03; */
+        cursor: pointer;
+      }
+      .turtle {
+        position: absolute;
+        background-image: url("/static/images/turtle.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 110px;
+        height: 50px;
+        bottom: 70%; /* 트랙과 동일한 높이로 설정 */
+        left: 0; /* 트랙의 시작점과 정렬 */
+        transform: translateY(50%);
+        transition: transform 45s linear; /* 🔥 45초 동안 부드럽게 이동 */
+      }
+
+      .flag {
+        position: absolute;
+        background-image: url("/static/images/flag.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 50px;
+        height: 50px;
+        bottom: 75%; /* 트랙과 동일한 높이로 설정 */
+        right: 0; /* 트랙의 끝점과 정렬 */
+        transform: translateY(50%);
+      }
+
+      #loading-container {
+        position: relative;
+        width: 100%;
+        height: 30vh;
+        margin-bottom: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #track {
+        position: absolute;
+        top: 35%;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #ffd19f, #ff8e03);
+        border-radius: 5px;
+        transform: translateY(-50%);
+      }
+
+      .listen-wait-1,
+      .listen-wait-2,
+      .listen-wait-3 {
+        border: none;
+        background: none;
+        font-size: 4rem;
+        cursor: pointer;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bg-music" autoplay loop>
+      <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+    </audio>
+    <section id="loading">
+      <div class="container">
+        <div class="title">
+          <button class="listen-wait-1">🎧</button> 입력한 정보로<br />
+          로리가 그림을 만드는 중이야 !<br />
+          조금만 기다려줘 !
+        </div>
+        <!-- 🐢 거북이 애니메이션 추가 -->
+        <div id="loading-container">
+          <div id="track"></div>
+          <div class="turtle" id="turtle"></div>
+          <div class="flag" id="flag"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="makeimg">
+      <div class="title">
+        <button class="listen-wait-2">🎧</button>그림이 완성됐어 !<br />
+        같이 보러갈래 ?
+      </div>
+      <div class="button-container">
+        <button class="btn" id="yes">응 !</button>
+      </div>
+    </section>
+
+    <section id="showimg">
+      <div class="title">
+        <button class="listen-wait-3">🎧</button>✨ 짜잔! 마음에 드는 그림을
+        골라줘!
+      </div>
+      <div class="select-container">
+        <div class="select-box" id="sel1"></div>
+        <div class="select-box" id="sel2"></div>
+        <div class="select-box" id="sel3"></div>
+      </div>
+    </section>
+    <script type="module">
+      //   import CONFIG from "./static/js/config.js";
+
+      document.addEventListener(
+        "click",
+        function () {
+          let bgMusic = document.getElementById("bg-music");
+          bgMusic.volume = 0.05;
+          bgMusic.play();
+        },
+        { once: true }
+      );
+
+      document
+        .querySelector(".listen-wait-1")
+        .addEventListener("pointerdown", () => {
+          speakTextWithAzure(
+            "입력한 정보로 로리가 그림을 만드는 중이야 ! 조금만 기다려줘 ! "
+          );
+        });
+      document
+        .querySelector(".listen-wait-2")
+        .addEventListener("pointerdown", () => {
+          speakTextWithAzure("그림이 완성됐어 ! 같이 보러갈래 ?");
+        });
+      document
+        .querySelector(".listen-wait-3")
+        .addEventListener("pointerdown", () => {
+          speakTextWithAzure("짜잔 ! 마음에 드는 그림을 골라줘!");
+        });
+      generateImage(); // ✅ 페이지 로드되자마자 실행
+
+      // const FLASK_SERVER = CONFIG.FLASK_SERVER;
+      const FLASK_SERVER = "https://drawry.r-e.kr";
+
+      const loadingSection = document.getElementById("loading");
+      const makeimgSection = document.getElementById("makeimg");
+      const showimgSection = document.getElementById("showimg");
+
+      const yesBtn = document.getElementById("yes");
+
+      const sel1 = document.getElementById("sel1");
+      const sel2 = document.getElementById("sel2");
+      const sel3 = document.getElementById("sel3");
+
+      function startTurtleAnimation() {
+        const turtle = document.getElementById("turtle");
+
+        // 뷰포트 전체가 아니라, 트랙 길이에 맞춰 이동하도록 조정
+        const trackWidth =
+          document.getElementById("loading-container").offsetWidth;
+        const turtleWidth = turtle.offsetWidth;
+
+        turtle.style.transform = `translateX(${trackWidth - turtleWidth}px)`;
+      }
+
+      function stopTurtleAnimation() {
+        const turtle = document.getElementById("turtle");
+        turtle.style.transform = "translateX(0)"; // 원래 위치로 복귀
+      }
+
+      // 초기 섹션 설정
+      loadingSection.style.display = "block";
+      makeimgSection.style.display = "none";
+      showimgSection.style.display = "none";
+
+      async function generateImage() {
+        console.log("🟢 generateImage() 호출됨!");
+        console.log("🐢 startTurtleAnimation 실행 시도!");
+
+        startTurtleAnimation(); // ✅ 여기서 실행됨
+
+        try {
+          const response = await fetch("/generate_image", { method: "POST" });
+          const result = await response.json();
+
+          if (result.success) {
+            stopTurtleAnimation(); // 이미지 생성 완료되면 멈춤
+          }
+        } catch (error) {
+          console.error("이미지 생성 실패:", error);
+          stopTurtleAnimation(); // 실패해도 멈추도록 설정
+        }
+      }
+
+      // 이미지 생성 상태 확인
+      function checkImageStatus() {
+        fetch(`${FLASK_SERVER}/api/status`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (!data.processing && data.image_urls.length === 3) {
+              console.log("✅ 이미지 생성 완료!");
+              localStorage.setItem(
+                "generatedImages",
+                JSON.stringify(data.image_urls)
+              );
+
+              [sel1, sel2, sel3].forEach((el, idx) => {
+                el.innerHTML = `<img src="${FLASK_SERVER}${data.image_urls[idx]}" />`;
+              });
+
+              loadingSection.style.display = "none";
+              makeimgSection.style.display = "block";
+            } else {
+              console.log("⏳ 이미지 생성 중...");
+              setTimeout(checkImageStatus, 3000);
+            }
+          })
+          .catch((error) => console.error("🚨 상태 확인 중 오류 발생:", error));
+      }
+
+      // "응!" 버튼 클릭 시 showimg 섹션 표시
+      yesBtn.addEventListener("click", () => {
+        makeimgSection.style.display = "none";
+        showimgSection.style.display = "block";
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+      });
+
+      // 이미지 선택 시 다음 페이지로 이동 (선택한 이미지 저장)
+      function selectImage(imageIdx) {
+        const images = JSON.parse(localStorage.getItem("generatedImages"));
+        if (images && images[imageIdx]) {
+          localStorage.setItem("selectedImage", images[imageIdx]);
+          window.location.href = "/turtlegame";
+        }
+      }
+
+      sel1.addEventListener("click", () => selectImage(0));
+      sel2.addEventListener("click", () => selectImage(1));
+      sel3.addEventListener("click", () => selectImage(2));
+
+      // 이미지 생성 대기 중이면 상태 확인 시작
+      if (localStorage.getItem("imageProcessing") === "true") {
+        checkImageStatus();
+      }
+    </script>
+    <script src="{{ str(request.url_for('static', path='js/script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>동화 만들기</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/10_makestory.css')).replace('http://', 'https://') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-box">
+        <button class="listen-makestory" style="cursor: pointer">🎧</button>
+        아까 만든 그림과 어울리는 내용을<br />우리 함께 만들어볼까?
+      </div>
+      <button class="story-btn" id="storyBtn">동화 만들기</button>
+      <div class="drawing-box"></div>
+    </div>
+    <script
+      type="module"
+      src="{{ str(request.url_for('static', path='/js/config.js')).replace('http://', 'https://')}}"
+    ></script>
+    <script
+      type="module"
+      src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"
+    ></script>
+
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+
+    <script
+      type="module"
+      src="{{ str(request.url_for('static', path='/js/10_makestory.js')).replace('http://', 'https://')}}"
+    ></script>
+  </body>
+</html>

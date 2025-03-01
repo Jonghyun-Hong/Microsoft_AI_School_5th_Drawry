@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flip Game</title><link
+    rel="stylesheet"
+    href="{{ str(request.url_for('static', path='css/style.css')).replace('http://', 'https://')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{ str(request.url_for('static', path='css/flip.css')).replace('http://', 'https://')}}"
+  /></head>
+  <body>
+    <!--1. 인트로 화면 -->
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <!-- info-container-->
+          <button id="helpBtn" class="help">?</button>
+          <!--infoBtn-->
+          <div class="title-text">찾아라!단어!</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+    
+        <!--2. 게임 메인 화면 -->
+        <section id="section-2" class="game-section">
+          <div class="container">
+            <div class="logo"></div>
+            <button id="helpBtn" class="help">?</button>
+            <div class="text-container">
+              <div class="intro-text">
+                카드의 단어를 집중해서 봐줘!&nbsp;
+              </div>
+              <button id="speakLook" class="speak-btn-look">🎧</button>
+            </div>
+            <div id="countdownTimer"></div>
+        
+            <div class="buttons-container" id="buttons-container">
+            </div>
+        </section>
+    
+        <!-- 3. 단어 들려주기 -->
+        <section id="section-3" class="game-section">
+          <div class="logo"></div>
+          <img src="static/images/speak.png" alt="speak" class="speak-img">
+      </section>
+    
+    <!-- 4. 정답을 맞춰봐 ! -->
+    <section id="section-4" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <button id="helpBtn" class="help">?</button>
+          <div class="text-container">
+              <div class="intro-text">
+                  방금 들은 단어가 어디에 있을까 ?&nbsp;
+              </div>
+              <button id="speakWhat" class="speak-btn-what">🎧</button>
+          </div><div class="hollow"></div>
+          <div class="buttons-container" id="answer-buttons"></div> 
+      </div>
+    </section>
+    
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button
+        >
+        <h2>게 임 설 명 <button id="helpSpeakBtn" class="help-speak-btn">🎧</button
+          ></h2>
+        <p>
+          <span class="num">𝟭 .</span> 30초 후에 단어를 숨길거야 💫 .<br /><span class="num"
+            >𝟮 .</span> 카드의 단어를 집중해서 봐줘 👀 .<br/><span class="num"
+            >𝟯 .</span> 들은 단어가 어디에 숨어있는지 찾아봐 🔍 .
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+
+    <div id="modalOverlay" class="modal-overlay"></div>
+        <div id="resultModal" class="modal">
+            <p id="resultText" ></p>
+            <button onclick="confirmModal()" id="confirmButton" class="check-btn">확인</button>
+        </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            let bgMusic = document.getElementById("bg-music");
+            bgMusic.volume = 0.1; 
+          });
+        </script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/flip_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

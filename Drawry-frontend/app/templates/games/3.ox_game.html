@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OX Game</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/ox.css')).replace('http://', 'https://')}}"
+    />
+  </head>
+  <body>
+    <section id="section-1" class="game-section">
+      <audio id="bg-music" autoplay loop>
+        <source src="/static/sound/cute.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button class="help" id="helpBtn">?</button>
+          <div class="title-text">OX게임</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+
+    <section id="section-2" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <button class="help" id="helpBtn">?</button>
+        <div class="text-container">
+          <span class="highlight" id="wordText"> </span>
+          <input type="hidden" id="isCorrect" />
+          <button class="speak-btn" onclick="speakTextFromElement()">🎧</button>
+        </div>
+        <div class="buttons-container">
+          <button
+            class="animated-button"
+            data-choice="O"
+            onclick="checkAnswer('O')"
+          >
+            O
+          </button>
+          <button
+            class="animated-button"
+            data-choice="X"
+            onclick="checkAnswer('X')"
+          >
+            X
+          </button>
+        </div>
+        <div
+          class="modal-overlay"
+          id="modalOverlay"
+          style="display: none"
+        ></div>
+        <div class="modal" id="resultModal" style="display: none">
+          <p id="resultText"></p>
+          <button id="confirmButton" class="check-btn" onclick="confirmModal()">
+            확 인
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🎧 을 눌러서 단어를 들어봐.<br /><spanclass="num">
+          𝟮 .</span>들리는 단어와 화면에 보이는 단어를 비교해 보자 👀<br /><spanclass="num">
+          𝟯 .</span>똑같으면 ⭕️, 다르면 ❌를 카드에서 선택해줘!
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let bgMusic = document.getElementById("bg-music");
+        bgMusic.volume = 0.1;
+      });
+    </script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/ox_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

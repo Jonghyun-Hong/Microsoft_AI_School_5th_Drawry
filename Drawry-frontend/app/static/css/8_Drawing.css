@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "peach", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  src: url("/static/fonts/PeachMarket-Regular.woff") format("woff");
+}
+
+body {
+  font-family: "peach", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #fffff6;
+  overflow: hidden;
+}
+
+/* 컨테이너 스타일 */
+#container {
+  margin: auto;
+  width: 1024px;
+  text-align: center;
+  max-width: 100%; /* 세로 정렬 */
+}
+
+#selectedInfo {
+  text-align: center;
+  font-size: 2vw;
+  margin-bottom: 20px; /* 캔버스와 간격 */
+  display: block;
+}
+
+/* 캔버스 */
+.drawingsection {
+  max-width: 100%;
+  transform: translateX(-50%, -50%);
+  height: auto;
+  padding: 0;
+  aspect-ratio: 2 / 1; /* 2:1 비율로 보이도록 */
+  border: 5px solid #ff8e03;
+  border-radius: 16px;
+  background: white;
+  touch-action: none;
+}
+
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+  gap: 20px; /* 툴박스와 저장 버튼 사이 간격 */
+}
+
+/* 도구 영역 (툴박스) - 캔버스 하단 중앙 */
+.toolbox {
+  width: 80%;
+  max-width: 800px;
+  height: 70px;
+  background: white;
+  border: 7px solid #ff8e03;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.toolbox input[type="range"] {
+  width: 190px;
+}
+
+.toolbox input[type="color"] {
+  width: 55px;
+  height: 55px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.toolbox button {
+  width: 52px;
+  height: 55px;
+  border: none;
+  background-size: cover;
+  cursor: pointer;
+}
+
+/* 각 버튼 별 배경 이미지*/
+#startDrawingBtn {
+  background: url("{{ str(request.url_for('static', path='images/main/pencil_.png')).replace('http://', 'https://') }}")
+    no-repeat center;
+  background-size: 70% 70%;
+}
+
+#clearBtn {
+  background: url("{{ str(request.url_for('static', path='images/main/Eraser_.png')).replace('http://', 'https://') }}")
+    no-repeat center;
+  background-size: 70% 70%;
+}
+
+#stopDrawingBtn {
+  width: 55px;
+  height: 55px;
+  background: url("{{ str(request.url_for('static', path='images/main/pointer.png')).replace('http://', 'https://') }}")
+    no-repeat center;
+  background-size: 70% 70%;
+}
+
+/* 저장 버튼 */
+.save-button {
+  width: 200px;
+  height: 80px;
+  background: #ff8e03;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  padding: 0;
+  margin-top: 1px;
+  text-align: center;
+}
+
+.save-button:hover {
+  background-color: #ff6f00;
+}
+
+/* 뒤로가기 버튼 */
+.back-button {
+  font-size: 3rem;
+  top: 20px;
+  left: 20px;
+  padding: 0;
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  background-color: #fffff6;
+  color: #ff8e03;
+}

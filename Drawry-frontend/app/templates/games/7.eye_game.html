@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGazer Calibration</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/eye.css')).replace('http://', 'https://')}}"
+    />
+    <style>
+      .Calibration {
+        width: 50px;
+        height: 50px;
+        background-image: url("/static/images/cow.png");
+        background-size: cover;
+        border-radius: 50%;
+        position: fixed;
+        transition: opacity 0.2s ease-in-out;
+        cursor: pointer;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpBtn" class="help">?</button>
+          <div class="title-text">동화읽어보자</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시 작</button>
+      </div>
+    </section>
+
+    <!---2 section 2 캘리브레이션 시작 --->
+    <section id="section-2" class="game-section">
+      <!-- <div id = "status">Status</div> -->
+      <button id="CalibrateButton" onclick="restart()" style="display: none">
+        다시하기
+      </button>
+      <div id="loading" class="loading"></div>
+
+      <div id="calibrationDiv">
+        <div class="Calibration" id="Pt1"></div>
+        <!-- <div class="Calibration" id="Pt2"></div> -->
+        <div class="Calibration" id="Pt3"></div>
+        <div class="Calibration" id="Pt4"></div>
+        <div class="Calibration" id="Pt5"></div>
+        <div class="Calibration" id="Pt6"></div>
+        <div class="Calibration" id="Pt7"></div>
+        <div class="Calibration" id="Pt8"></div>
+        <div class="Calibration" id="Pt9"></div>
+      </div>
+
+      <audio id="mooSound" src="static/sound/mooSound.mp3"></audio>
+    </section>
+
+    <!-- 3. 읽어보기 --->
+    <section id="section-3" class="game-section">
+      <div class="logo"></div>
+      <button id="helpBtn" class="help">?</button>
+      <p id="sentence">
+        <span data-word="알라딘은">알라딘은</span>
+        <span data-word="무서웠지만">무서웠지만</span>
+        <span data-word="용기를">용기를</span>
+        <span data-word="내어">내어</span>
+        <span data-word="동굴을">동굴을</span>
+        <span data-word="탐험하기로">탐험하기로</span>
+        <span data-word="했어요">했어요</span>. <br />
+        <!-- 문장 끝에서 줄 바꿈 -->
+        <span data-word="동굴">동굴</span>
+        <span data-word="깊숙한">깊숙한</span>
+        <span data-word="곳에서">곳에서</span>
+        <span data-word="오래된">오래된</span>
+        <span data-word="램프를">램프를</span>
+        <span data-word="발견했어요">발견했어요</span>.
+        <br />
+        <span data-word="알라딘은">알라딘은</span>
+        <span data-word="램프를">램프를</span>
+        <span data-word="만지다가">만지다가</span>
+        <span data-word="실수로">실수로</span>
+        <span data-word="문질렀는데">문질렀는데</span>,
+        <br />
+        <span data-word="갑자기">갑자기</span>
+        <span data-word="연기가">연기가</span>
+        <span data-word="나며">나며</span>
+        <span data-word="지니가">지니가</span>
+        <span data-word="나타났어요">나타났어요</span>!
+        <br />
+        <span data-word="지니가">지니가</span>
+        <span data-word="말했습니다">말했습니다</span>.
+        <br />
+        <span data-word='"주인님'>“주인님</span>
+        <span data-word="소원을">소원을</span>
+        <span data-word="세">세</span>
+        <span data-word="가지">가지</span>
+        <span data-word="들어드리겠습니다">들어드리겠습니다</span>.”
+      </p>
+      <button id="nextBtn" class="next-btn">다음으로</button>
+    </section>
+
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🐮 8마리를 눌러볼까 ? <br /><span
+            class="num"
+            >𝟮 .</span
+          >🐮 1마리를 3번씩 눌러줘. <br /><span class="num">𝟯 .</span> 🐮 를 꼭
+          바라보면서 눌러야돼 ! <br /><span class="num">𝟰 .</span> 🐮 가
+          회색으로 변하면 다른 🐮 를 누르면 돼 ✔️<br /><span class="num"
+            >𝟱.</span
+          >
+          그리고 문장의 부분들을 눌러가면서 소리를 들어보자!
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+
+    <div id="modalOverlay" class="modal-overlay"></div>
+    <div id="resultModal" class="modal">
+      <p id="resultText"></p>
+      <button onclick="confirmModal()" id="confirmButton" class="check-btn">
+        확인
+      </button>
+    </div>
+    <script src="/static/js/webgazer.js"></script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/eye_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>

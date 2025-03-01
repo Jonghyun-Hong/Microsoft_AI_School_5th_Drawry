@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>평가 지표</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <style>
+      .score {
+        font-size: 4rem;
+        margin-bottom: 30px;
+      }
+      .result-container {
+        background: none;
+        border: 2px solid #ff8e03;
+        width: 90%;
+        margin: auto;
+        border-radius: 15px;
+      }
+      .group {
+        position: relative; /* 게이지 바를 부모 요소로 설정 */
+        display: flex;
+        flex-direction: column; /* 요소들을 세로 정렬 */
+        align-items: center; /* 수평 중앙 정렬 */
+        text-align: center; /* 텍스트 중앙 정렬 */
+        margin: 20px 0;
+      }
+
+      .group-name {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+      .progress-bar {
+        width: 80%;
+        height: 30px;
+        background-color: #ddd;
+        border-radius: 15px;
+        overflow: hidden;
+        /* position: relative; ✅ 게이지 바 내부에서 상대 위치 지정 */
+      }
+      .progress {
+        height: 100%;
+        /* text-align: center; */
+        line-height: 30px;
+        color: white;
+        transition: width 1s;
+      }
+      /* 🌟 게이지 아이콘 스타일 */
+      .gauge-icon {
+        position: absolute;
+        top: 20px;
+        width: 80px;
+        height: 40px;
+        transition: left 3s ease-out; /* 부드러운 이동 효과 */
+        z-index: 10; /* ✅ 게이지 바 위에 표시되도록 설정 */
+        opacity: 1; /* ✅ 보이게 설정 */
+        display: block; /* ✅ 반드시 표시되도록 설정 */
+        transform: translateX(
+          0%
+        ); /* ✅ 초기 위치를 게이지 바의 시작점으로 설정 */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="score">✨ 활동 지표 ✨</div>
+      <div class="logo"></div>
+      <div class="result-container">
+        <div class="group" id="글자인식">
+          <div class="group-name">읽기</div>
+          <div class="progress-bar">
+            <div class="progress" id="progress-글자인식"></div>
+            <img
+              src="{{ url_for('static', path='images/turtle.png') }}"
+              class="gauge-icon"
+              id="icon-글자인식"
+              alt="글자인식 아이콘"
+            />
+          </div>
+        </div>
+
+        <div class="group" id="쓰기">
+          <div class="group-name">쓰기</div>
+          <div class="progress-bar">
+            <div class="progress" id="progress-쓰기"></div>
+            <img
+              src="{{ url_for('static', path='images/turtle.png') }}"
+              class="gauge-icon"
+              id="icon-쓰기"
+              alt="쓰기 아이콘"
+            />
+          </div>
+        </div>
+
+        <div class="group" id="말하기">
+          <div class="group-name">말하기</div>
+          <div class="progress-bar">
+            <div class="progress" id="progress-말하기"></div>
+            <img
+              src="{{ url_for('static', path='images/turtle.png') }}"
+              class="gauge-icon"
+              id="icon-말하기"
+              alt="말하기 아이콘"
+            />
+          </div>
+        </div>
+
+        <div class="group" id="작업기억">
+          <div class="group-name">기억력</div>
+          <div class="progress-bar">
+            <div class="progress" id="progress-작업기억"></div>
+            <img
+              src="{{ url_for('static', path='images/turtle.png') }}"
+              class="gauge-icon"
+              id="icon-작업기억"
+              alt="작업기억 아이콘"
+            />
+          </div>
+        </div>
+
+        <div class="group" id="집중력">
+          <div class="group-name">집중력</div>
+          <div class="progress-bar">
+            <div class="progress" id="progress-집중력"></div>
+            <img
+              src="{{ url_for('static', path='images/turtle.png') }}"
+              class="gauge-icon"
+              id="icon-집중력"
+              alt="집중력 아이콘"
+            />
+          </div>
+        </div>
+      </div>
+      <button
+        class="check-btn"
+        style="margin-top: 20px; width: 100px; height: 50px; font-size: 1.5rem"
+      >
+        확인
+      </button>
+    </div>
+
+    <script>
+      // ✅ 아이콘 이동 기능 수정 (거북이가 게이지 끝까지 이동)
+      function updateGauge(progressId, iconId, percentage, color) {
+        const progressEl = document.getElementById(progressId); // .progress 요소
+        const iconEl = document.getElementById(iconId); // .gauge-icon 요소
+
+        if (progressEl && iconEl) {
+          // 1) 게이지 컬러 바 설정
+          progressEl.style.width = percentage + "%";
+          progressEl.style.backgroundColor = color;
+
+          // 2) 게이지가 렌더링된 뒤 실제 너비 계산
+          requestAnimationFrame(() => {
+            const progressWidth = progressEl.offsetWidth; // 채워진 바의 실제 픽셀 너비
+            const iconWidth = iconEl.offsetWidth; // 거북이 아이콘의 너비
+
+            // 3) 거북이 위치 계산 (거북이를 컬러 바 끝에 맞추고 싶다면)
+            //    - 아이콘이 컬러 바 끝에 딱 맞게 하려면 progressWidth - iconWidth
+            //    - 아이콘을 컬러 바 중앙에 오게 하려면 progressWidth - (iconWidth / 2)
+            let iconPosition = progressWidth - iconWidth;
+            if (iconPosition < 0) iconPosition = 0; // 혹시 음수면 0으로 보정
+
+            // 4) 거북이 이동
+            iconEl.style.transform = `translateX(${iconPosition}px)`;
+          });
+        }
+      }
+
+      // ✅ 결과 데이터 확인
+      async function loadResults() {
+        const response = await fetch(
+          "https://52.141.27.150/evaluation_results"
+        );
+        const data = await response.json();
+        const results = data.results;
+
+        console.log("📊 결과 데이터:", results); // ✅ 데이터 확인용 출력
+
+        // ✅ 그룹별 게이지 업데이트
+        results.forEach((result) => {
+          const progressBar = document.getElementById(
+            `progress-${result.group_name}`
+          );
+          const icon = document.getElementById(`icon-${result.group_name}`);
+          console.log(icon); // ✅ 콘솔에 아이콘이 출력되는지 확인
+          if (progressBar && icon) {
+            const score = result.score;
+            progressBar.style.width = score + "%";
+            // progressBar.textContent = score + "%";
+
+            // ✅ 아이콘과 게이지 업데이트
+            updateGauge(
+              `progress-${result.group_name}`,
+              `icon-${result.group_name}`,
+              score,
+              score <= 30 ? "lightyellow" : score <= 70 ? "orange" : "green"
+            );
+          }
+        });
+      }
+      // . 추가!
+      document
+        .querySelector(".check-btn")
+        .addEventListener("pointerdown", () => {
+          location.href = "/maintab";
+        });
+
+      window.onload = loadResults;
+    </script>
+  </body>
+</html>

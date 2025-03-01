@@ -1,0 +1,53 @@
+.listen-makestory {
+  border: none;
+  background: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.text-box {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 10%;
+  left: 50%;
+  text-align: center;
+  color: black;
+  font-size: 2rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  line-height: 50px;
+}
+
+.drawing-box {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 25%;
+  left: 50%;
+  width: 370px; /* 380px + 약간의 여유 공간 */
+  height: 370px; /* 380px + 약간의 여유 공간 */
+  background: none;
+  border-radius: 11px;
+  padding: 0;
+  border: 10px solid #ff8e03;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.story-btn {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: 10%;
+  left: 50%;
+  padding: 0;
+  background: #ff8e03;
+  color: #fffff6;
+  border: none;
+  border-radius: 22px;
+  width: 30vw;
+  height: 7vh;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.5rem;
+}

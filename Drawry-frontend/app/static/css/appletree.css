@@ -1,0 +1,134 @@
+body {
+  font-family: "peach", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 92vh;
+  margin: 0;
+  background-color: #fffff6;
+}
+.game-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#section-2 {
+  display: none;
+}
+
+#section-1 .help {
+  top: -5px; /* 제목보다 약간 위쪽 */
+  left: 90px;
+}
+
+#section-2 .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+
+.correct-word-container {
+  display: flex;
+}
+
+.speak-btn-word {
+  position: absolute;
+  background-color: #fffff6;
+  border: 2px solid #13c01f;
+  border-radius: 20px;
+  font-size: 40px;
+  cursor: pointer;
+  text-align: center;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 70px;
+  left: 50%;
+  bottom: 20px;
+  padding: 0;
+}
+
+.apple:hover {
+  transform: scale(1.2);
+}
+.apple.used {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  pointer-events: none; /* 선택 불가능하게 */
+}
+.hint:hover {
+  transform: scale(1.2);
+}
+.hint-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-size: 40px;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px 80px;
+  border: 2px solid #ff8e03;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 9999;
+}
+
+.hint-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 8000;
+}
+
+.jam {
+  color: black;
+  font-size: 1.5rem;
+  padding: 20px 30px; /* 여백을 줄여 크기 조절 */
+  background: white; /* 배경 추가 (가독성 향상) */
+  border: 2px solid #ff8e03;
+  border-radius: 20px; /* 둥근 말풍선 모양 */
+  position: absolute;
+  bottom: 200px; /* 말풍선처럼 위로 */
+  right: 3%; /* 가운데 정렬 */
+  transform: translateX(95%);
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  box-sizing: border-box; /* padding 포함한 크기 유지 */
+  min-width: 170px; /* 최소 크기 유지 */
+  min-height: 75px;
+  text-align: left; /* 텍스트 가운데 정렬 */
+  letter-spacing: 5px;
+}
+
+/* 말풍선의 꼬리 만들기 */
+.jam::after {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* 꼬리를 버튼 아래쪽에 위치 */
+  right: 20%;
+  transform: translateX(80%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #ff8e03 transparent transparent transparent;
+}
+.undo {
+  color: #ff8e03;
+  cursor: pointer;
+  position: absolute;
+  border: none;
+  background: none;
+  font-size: 2rem;
+  right: -15%;
+  bottom: 215px;
+}
+.undo:hover {
+  transform: scale(1.2);
+}
+.make:hover {
+  transform: scale(1.2);
+}

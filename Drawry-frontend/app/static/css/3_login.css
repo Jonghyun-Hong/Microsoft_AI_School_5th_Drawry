@@ -1,0 +1,132 @@
+.logo-container {
+  position: relative;
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+  justify-content: center; /* 기본적으로 중앙 정렬 */
+  flex-direction: row; /* 가로 정렬 */
+  width: 100%;
+  height: 200px; /* 컨테이너 높이 설정 */
+}
+
+/* 개별 요소 배치 */
+.dots {
+  font-size: 7.3rem;
+  color: #FF8E03;
+  position: absolute;
+  top: 5px;
+  left: 16%;
+  letter-spacing: -30px;
+}
+
+.rotated-d {
+  font-size: 8.3rem;
+  font-weight: 700;
+  color: #FF8E03;
+  transform: rotate(90.37deg);
+  position: absolute;
+  top: 45px;
+  left: 19%;
+}
+
+.logo-text {
+  font-size: 10rem;
+  font-weight: 800;
+  color: #FF8E03;
+  position: absolute;
+  top: 25px;
+  left: 30%;
+}
+
+
+ .login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-width: 471px;
+  margin: 0 auto;
+  text-align: center;
+ }
+ 
+ 
+ .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 400px;
+  order: 2;
+  margin: 50px auto 0 auto;
+ }
+ 
+ .login-form input {
+  padding: 12px;
+  border: 2px solid #FF8E03;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background: #FFFFF6;
+  color: #FF8E03;
+ }
+ 
+ .login-form input::placeholder {
+  color: #FF8E03;
+  opacity: 0.7;
+ }
+ 
+ .email-login-btn {
+  background: #FF8E03;
+  color: #FFFFF6;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.2rem;
+ }
+ 
+.email-login-btn:hover {
+  background: #f58803;
+}
+
+ .divider {
+  text-align: center;
+  color: #ff8e04;
+  font-size: 1rem;
+  margin: 10px auto;
+  width: 190px;
+  order: 1;
+ }
+ 
+ @media screen and (max-width: 1024px) {
+  .wrapper {
+    zoom: 0.75;
+  }
+  .login-container {
+    width: 90%;
+  }
+ }
+
+ .register-link {
+  text-align: center;
+  color: #FF8E03;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* 회원가입 폼 스타일 */
+.register-form {
+  display: none;  /* 기본적으로 숨김 */
+}
+
+.register-form.active {
+  display: flex;
+}
+
+.login-form.inactive {
+  display: none;
+}

@@ -1,0 +1,138 @@
+.choice-text {
+  font-size: 55px;
+  margin-bottom: 40px;
+}
+
+.listen-icon {
+  background: none;
+  border: none;
+  font-size: 50px;
+  top: 20px;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+}
+
+.listen-icon:hover {
+  transform: scale(1.2);
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  overflow: visible;
+}
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  min-height: 300px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.card {
+  width: 250px;
+  height: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0.5;
+}
+
+.card-img {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #ff8e03;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-text {
+  font-size: 20px;
+  text-align: center;
+}
+
+.center-card {
+  transform: scale(1.2);
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 10;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #ff8e03;
+  font-size: 90px;
+  cursor: pointer;
+  padding: 10px;
+  transition: transform 0.2s;
+}
+.nav-btn:hover {
+  transform: scale(1.2);
+}
+
+.select-btn {
+  background-color: #ff8e03;
+  color: #fffff6;
+  font-size: 30px;
+  padding: 18px 4%;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-top: 40px;
+}
+.select-btn:hover {
+  transform: scale(1.2);
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 9999;
+  opacity: 1;
+}
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+.check-btn {
+  background-color: #ff8e03;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}

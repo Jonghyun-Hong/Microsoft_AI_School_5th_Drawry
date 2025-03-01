@@ -1,0 +1,82 @@
+.game-section {
+  display: none;
+  text-align: center;
+}
+
+#section-1 .help {
+  top: -5px; /* 제목보다 약간 위쪽 */
+  left: 60px;
+}
+
+#section-2 .help {
+  top: 20px; /* 섹션-1보다 더 위쪽 */
+  right: 30px; /* 오른쪽으로 배치 */
+}
+.text-container {
+  display: flex;
+  position: relative;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.word-speak-btn {
+  background: none;
+  border: none;
+  font-size: 70px;
+  justify-content: left;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  padding: 0;
+}
+.word-speak-btn:hover {
+  transform: scale(1.2);
+}
+.canvas {
+  display: block;
+  background-color: white;
+  border: 2px solid #ff8e03;
+  border-radius: 20px;
+  touch-action: none;
+  margin: 20px auto;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+  gap: 50px;
+}
+.clean {
+  position: relative;
+  color: #fffff6;
+  background-color: #ff8e03;
+  border: 2px solid #ff8e03;
+  border-radius: 20px;
+  padding: 10px 120px;
+  font-size: 40px;
+  cursor: pointer;
+  bottom: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.score {
+  position: relative;
+  color: #fffff6;
+  background-color: #ff8e03;
+  border: 2px solid #ff8e03;
+  border-radius: 20px;
+  padding: 10px 150px;
+  font-size: 40px;
+  cursor: pointer;
+  bottom: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+.clean:hover,
+.score:hover {
+  background-color: #ff6f00;
+  transform: scale(1.2);
+}

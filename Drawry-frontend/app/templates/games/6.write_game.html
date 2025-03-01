@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>단어 쓰기 연습</title>
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/0_style.css')).replace('http://', 'https://')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ str(request.url_for('static', path='css/write.css')).replace('http://', 'https://')}}"
+    />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <section id="section-1" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <div class="title-container">
+          <button id="helpBtn" class="help">?</button>
+          <div class="title-text">날따라써봐요!</div>
+          <button id="speakIntro" class="speak-btn-game">🎧</button>
+        </div>
+        <button id="startBtn" class="start">시작</button>
+      </div>
+    </section>
+
+    <section id="section-2" class="game-section">
+      <div class="container">
+        <div class="logo"></div>
+        <button id="helpBtn" class="help">?</button>
+        <div class="text-container">
+          <button id="wordSpeakBtn" class="word-speak-btn">🎧</button>
+        </div>
+        <canvas id="drawCanvas" class="canvas"></canvas>
+        <div class="button-container">
+          <button class="clean" onclick="clearCanvas()">지 우 기</button>
+          <button class="score" onclick="gradeHandwriting()">채 점</button>
+        </div>
+        <p id="result"></p>
+      </div>
+    </section>
+
+    <div id="helpModal" class="help-modal">
+      <div class="help-modal-content">
+        <button id="helpCloseBtn" class="help-close-btn">x</button>
+        <h2>
+          게 임 설 명
+          <button id="helpSpeakBtn" class="help-speak-btn">🎧</button>
+        </h2>
+        <p>
+          <span class="num">𝟭 .</span> 🎧을 눌러서 단어를 들어봐.<br /><span
+            class="num"
+          >
+            𝟮 .</span
+          >
+          화면에 보이는 단어를 따라써보자 ✏️<br /><span class="num"> 𝟯 .</span>
+          지우기를 누르면 지울 수 있어 ! <br />
+          <span class="num">𝟰 .</span> 다 썼으면 채점을 눌러줘 ✔️
+        </p>
+      </div>
+    </div>
+    <div id="helpModalOverlay" class="help-modal-overlay"></div>
+
+    <div class="modal-overlay" id="modalOverlay" style="display: none"></div>
+    <div id="resultModal" class="modal">
+      <div class="modal-content">
+        <p id="resultText"></p>
+        <button id="confirmButton" class="check-btn">다 음 게 임 으 로!</button>
+      </div>
+    </div>
+    <script></script>
+    <script src="{{ str(request.url_for('static', path='/js/script.js')).replace('http://', 'https://')}}"></script>
+    <script src="{{ str(request.url_for('static', path='/js/write_script.js')).replace('http://', 'https://')}}"></script>
+  </body>
+</html>
